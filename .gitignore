@@ -1,0 +1,37 @@
+*.log
+.DS_Store
+.env
+.env.backup
+.env.production
+.phpactor.json
+.phpunit.result.cache
+/.fleet
+/.idea
+/.nova
+/.phpunit.cache
+/.vscode
+/.zed
+/auth.json
+/node_modules
+/public/build
+/public/hot
+/public/storage
+/storage/*.key
+/storage/pail
+/vendor
+Homestead.json
+Homestead.yaml
+Thumbs.db
+.db_app_secret
+
+# Laravel generated caches (do not commit; bootstrap/cache/.gitignore applies to new clones)
+/bootstrap/cache/*.php
+!/bootstrap/cache/.gitignore
+
+# Compiled Blade views
+/storage/framework/views/*.php
+!/storage/framework/views/.gitignore
+
+# Logs under storage
+/storage/logs/*.log
+!/storage/logs/.gitignore

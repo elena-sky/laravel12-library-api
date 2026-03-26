@@ -4,7 +4,7 @@ Backend API (Laravel 12, API-first). Authentication: Laravel Sanctum.
 
 ## Project layout and naming
 
-- Application root: this directory (`library-api/`). Clone or open the repo anywhere on your machine; commands below assume your shell’s current working directory is this folder.
+- Application root: this directory (`laravel12-library-api/`). Clone or open the repo anywhere on your machine; commands below assume your shell’s current working directory is this folder.
 - `APP_NAME` in `.env`: **Library API**.
 - PostgreSQL: `DB_DATABASE=library`, `DB_USERNAME=library_user` (database name and DB login are separate from the app folder name).
 
