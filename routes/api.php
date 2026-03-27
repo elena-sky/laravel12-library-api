@@ -1,9 +1,6 @@
 <?php
 
+use App\Http\Controllers\Interfaces\StatusControllerInterface;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/health', function () {
-    return response()->json([
-        'status' => 'ok',
-    ]);
-});
+Route::get('/status/liveness', [StatusControllerInterface::class, 'liveness']);

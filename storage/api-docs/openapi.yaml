@@ -1,0 +1,34 @@
+openapi: 3.0.0
+info:
+  title: 'Library API'
+  description: 'REST API for the library system (versioned under /api/v1).'
+  version: 1.0.0
+servers:
+  -
+    url: /api/v1
+    description: 'Version 1'
+paths:
+  /status/liveness:
+    get:
+      tags:
+        - Status
+      summary: 'Liveness probe'
+      description: 'Returns 200 when the app process is up. Does not verify database or other dependencies.'
+      operationId: statusLiveness
+      responses:
+        '200':
+          description: 'Process is alive'
+          content:
+            application/json:
+              schema:
+                required:
+                  - data
+                  - message
+                properties:
+                  data: { required: [status], properties: { status: { type: string, example: ok } }, type: object }
+                  message: { type: string, example: 'Liveness check passed' }
+                type: object
+tags:
+  -
+    name: Status
+    description: Status

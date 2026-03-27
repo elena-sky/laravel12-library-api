@@ -87,9 +87,19 @@ Useful after changing `.env` when config is cached.
 php artisan serve
 ```
 
-Health check: `GET /api/health` returns `{"status":"ok"}` with HTTP **200**.
+Liveness: `GET /api/v1/status/liveness` returns unified JSON (`data`, `message`) with HTTP **200** — see [`App\Support\ApiResponse`](app/Support/ApiResponse.php) and exception JSON shaping in [`bootstrap/app.php`](bootstrap/app.php).
 
 Routes: [`routes/api.php`](routes/api.php); API prefix `/api` is registered in [`bootstrap/app.php`](bootstrap/app.php).
+
+## OpenAPI
+
+Spec is generated with [zircote/swagger-php](https://github.com/zircote/swagger-php) from PHP 8 attributes on the API contract (e.g. [`StatusControllerInterface`](app/Http/Controllers/Interfaces/StatusControllerInterface.php)) and root metadata in [`app/OpenApi/OpenApiInfo.php`](app/OpenApi/OpenApiInfo.php).
+
+```bash
+composer run openapi
+```
+
+Writes **`storage/api-docs/openapi.yaml`** (ignored by git except `.gitignore` in that folder). Full liveness URL in the spec is server `/api/v1` + path `/status/liveness` → **`GET /api/v1/status/liveness`**.
 
 ## Code style
 
