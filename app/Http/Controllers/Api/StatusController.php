@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Http\Contracts\StatusControllerInterface;
 use App\Http\Controllers\Controller;
-use App\Http\Controllers\Interfaces\StatusControllerInterface;
 use App\Support\ApiResponse;
 use Illuminate\Http\JsonResponse;
 

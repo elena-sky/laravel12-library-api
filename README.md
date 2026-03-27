@@ -89,11 +89,20 @@ php artisan serve
 
 Liveness: `GET /api/v1/status/liveness` returns unified JSON (`data`, `message`) with HTTP **200** — see [`App\Support\ApiResponse`](app/Support/ApiResponse.php) and exception JSON shaping in [`bootstrap/app.php`](bootstrap/app.php).
 
+### User account (Sanctum foundation)
+
+- `POST /api/v1/register` — create user; response includes `data.user`, `data.token`, `data.token_type` (`Bearer`).
+- `GET /api/v1/user` — current profile; header `Authorization: Bearer {token}`.
+- `PATCH /api/v1/user` — update `name` and `email` (authenticated).
+- `PUT /api/v1/user/password` — change password (`current_password`, `password`, `password_confirmation`).
+
+Login, logout, and token revocation are out of scope for this foundation pass; see project block plan in `../doc/plan_big.md`.
+
 Routes: [`routes/api.php`](routes/api.php); API prefix `/api` is registered in [`bootstrap/app.php`](bootstrap/app.php).
 
 ## OpenAPI
 
-Spec is generated with [zircote/swagger-php](https://github.com/zircote/swagger-php) from PHP 8 attributes on the API contract (e.g. [`StatusControllerInterface`](app/Http/Controllers/Interfaces/StatusControllerInterface.php)) and root metadata in [`app/OpenApi/OpenApiInfo.php`](app/OpenApi/OpenApiInfo.php).
+Spec is generated with [zircote/swagger-php](https://github.com/zircote/swagger-php) from PHP 8 attributes on the API contract (e.g. [`StatusControllerInterface`](app/Http/Contracts/StatusControllerInterface.php)) and root metadata in [`app/OpenApi/OpenApiInfo.php`](app/OpenApi/OpenApiInfo.php).
 
 ```bash
 composer run docs:generate

@@ -8,6 +8,163 @@ servers:
     url: /api/v1
     description: 'Version 1'
 paths:
+  /user:
+    get:
+      tags:
+        - User
+      summary: 'Current user profile'
+      operationId: currentUserShow
+      responses:
+        '200':
+          description: 'Current authenticated user'
+          content:
+            application/json:
+              schema:
+                required:
+                  - data
+                properties:
+                  data: { properties: { id: { type: integer, example: 1 }, name: { type: string }, email: { type: string, format: email }, created_at: { type: string, format: date-time }, updated_at: { type: string, format: date-time } }, type: object }
+                type: object
+        '401':
+          description: Unauthenticated
+      security:
+        -
+          sanctum: []
+    patch:
+      tags:
+        - User
+      summary: 'Update current user profile'
+      operationId: currentUserUpdate
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              required:
+                - name
+                - email
+              properties:
+                name:
+                  type: string
+                email:
+                  type: string
+                  format: email
+              type: object
+      responses:
+        '200':
+          description: 'Updated current user profile'
+          content:
+            application/json:
+              schema:
+                required:
+                  - data
+                  - message
+                properties:
+                  data: { properties: { id: { type: integer, example: 1 }, name: { type: string }, email: { type: string, format: email }, created_at: { type: string, format: date-time }, updated_at: { type: string, format: date-time } }, type: object }
+                  message: { type: string, example: 'Current user profile updated' }
+                type: object
+        '401':
+          description: Unauthenticated
+        '403':
+          description: Forbidden
+        '422':
+          description: 'Validation failed'
+      security:
+        -
+          sanctum: []
+  /user/password:
+    put:
+      tags:
+        - User
+      summary: 'Update current user password'
+      operationId: currentUserUpdatePassword
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              required:
+                - current_password
+                - password
+                - password_confirmation
+              properties:
+                current_password:
+                  type: string
+                  format: password
+                password:
+                  type: string
+                  format: password
+                password_confirmation:
+                  type: string
+                  format: password
+              type: object
+      responses:
+        '200':
+          description: 'Password updated successfully'
+          content:
+            application/json:
+              schema:
+                required:
+                  - message
+                properties:
+                  message: { type: string, example: 'Password updated successfully' }
+                type: object
+        '401':
+          description: Unauthenticated
+        '403':
+          description: Forbidden
+        '422':
+          description: 'Validation failed'
+      security:
+        -
+          sanctum: []
+  /register:
+    post:
+      tags:
+        - User
+      summary: 'Register a new user'
+      operationId: registerUser
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              required:
+                - name
+                - email
+                - password
+                - password_confirmation
+              properties:
+                name:
+                  type: string
+                  example: 'Ada Lovelace'
+                email:
+                  type: string
+                  format: email
+                  example: ada@example.com
+                password:
+                  type: string
+                  format: password
+                  example: correct-horse-battery-staple
+                password_confirmation:
+                  type: string
+                  format: password
+              type: object
+      responses:
+        '201':
+          description: 'User created; returns profile and API token'
+          content:
+            application/json:
+              schema:
+                required:
+                  - data
+                  - message
+                properties:
+                  data: { required: [user, token, token_type], properties: { user: { properties: { id: { type: integer, example: 1 }, name: { type: string }, email: { type: string, format: email }, created_at: { type: string, format: date-time }, updated_at: { type: string, format: date-time } }, type: object }, token: { type: string }, token_type: { type: string, example: Bearer } }, type: object }
+                  message: { type: string, example: 'Registration successful' }
+                type: object
+        '422':
+          description: 'Validation failed'
   /status/liveness:
     get:
       tags:
@@ -28,7 +185,16 @@ paths:
                   data: { required: [status], properties: { status: { type: string, example: ok } }, type: object }
                   message: { type: string, example: 'Liveness check passed' }
                 type: object
+components:
+  securitySchemes:
+    sanctum:
+      type: http
+      description: 'Laravel Sanctum personal access token: Authorization: Bearer {token}'
+      scheme: bearer
 tags:
+  -
+    name: User
+    description: User
   -
     name: Status
     description: Status

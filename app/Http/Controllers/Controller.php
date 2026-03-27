@@ -2,8 +2,12 @@
 
 namespace App\Http\Controllers;
 
-/** Shared HTTP entrypoint base for future middleware or helpers without pulling in framework defaults blindly. */
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
+
+/**
+ * Shared HTTP base: policy checks via {@see AuthorizesRequests} without pulling in unrelated traits.
+ */
 abstract class Controller
 {
-    //
+    use AuthorizesRequests;
 }

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Interfaces;
+namespace App\Http\Contracts;
 
 use Illuminate\Http\JsonResponse;
 use OpenApi\Attributes as OA;

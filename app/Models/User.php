@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Database\Factories\UserFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -10,7 +9,9 @@ use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 
 /**
- * Authenticatable identity for Sanctum-issued API tokens; mass assignment stays narrow on purpose.
+ * Authenticatable identity for the library system (Sanctum personal access tokens).
+ *
+ * Rentals and reading progress attach when a {@code BookRent} model exists; no relation is declared here yet.
  */
 class User extends Authenticatable
 {
