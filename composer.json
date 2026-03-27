@@ -6,7 +6,7 @@
     "keywords": ["laravel", "framework"],
     "license": "MIT",
     "require": {
-        "php": "^8.2",
+        "php": "^8.3",
         "laravel/framework": "^12.0",
         "laravel/sanctum": "^4.3",
         "laravel/tinker": "^2.10.1"
@@ -48,9 +48,25 @@
             "@php artisan config:clear --ansi",
             "@php artisan test"
         ],
-        "openapi": [
+        "test:ci": [
+            "@php artisan config:clear --ansi",
+            "@php artisan migrate:fresh --force --no-interaction",
+            "@php artisan test --without-tty"
+        ],
+        "lint": [
+            "./vendor/bin/pint --test"
+        ],
+        "format": [
+            "@php vendor/bin/pint"
+        ],
+        "docs:generate": [
             "@php -r \"is_dir('storage/api-docs') || mkdir('storage/api-docs', 0755, true);\"",
             "@php vendor/bin/openapi app -o storage/api-docs/openapi.yaml -f yaml"
+        ],
+        "openapi": "@docs:generate",
+        "quality": [
+            "@lint",
+            "@test:ci"
         ],
         "post-autoload-dump": [
             "Illuminate\\Foundation\\ComposerScripts::postAutoloadDump",

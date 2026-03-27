@@ -96,13 +96,39 @@ Routes: [`routes/api.php`](routes/api.php); API prefix `/api` is registered in [
 Spec is generated with [zircote/swagger-php](https://github.com/zircote/swagger-php) from PHP 8 attributes on the API contract (e.g. [`StatusControllerInterface`](app/Http/Controllers/Interfaces/StatusControllerInterface.php)) and root metadata in [`app/OpenApi/OpenApiInfo.php`](app/OpenApi/OpenApiInfo.php).
 
 ```bash
-composer run openapi
+composer run docs:generate
 ```
+
+Alias: `composer run openapi` (same as `docs:generate`).
 
 Writes **`storage/api-docs/openapi.yaml`** (ignored by git except `.gitignore` in that folder). Full liveness URL in the spec is server `/api/v1` + path `/status/liveness` → **`GET /api/v1/status/liveness`**.
 
 ## Code style
 
 ```bash
-./vendor/bin/pint
+composer run format
 ```
+
+Check only (no writes): `composer run lint` (`./vendor/bin/pint --test`).
+
+## CI (GitHub Actions)
+
+Workflow: [`.github/workflows/ci.yml`](.github/workflows/ci.yml) — PHP **8.3**, Composer cache, `composer install --optimize-autoloader`, then `composer lint`, `composer docs:generate`, `composer test:ci` (SQLite file `database/testing.sqlite`; job `env` includes `DB_*`, `CACHE_STORE=array`, `SESSION_DRIVER=array`, `QUEUE_CONNECTION=sync` so they override `.env` on the runner). No `.env.testing` — only `.env` (created from `.env.example` in CI). Triggers: **every** `push` (including `feat/…`, `main`, `master`, etc.) and **every** `pull_request`.
+
+## Local parity with CI
+
+Use your existing **`.env`**. Before the first `test:ci` run, create the SQLite file:
+
+```bash
+touch database/testing.sqlite
+```
+
+`composer run test:ci` runs `migrate:fresh` against the default DB from your environment. To match CI (SQLite file) without changing PostgreSQL settings in `.env` for normal work, prefix the command (Unix/macOS):
+
+```bash
+DB_CONNECTION=sqlite DB_DATABASE=database/testing.sqlite composer run test:ci
+```
+
+Or run the same checks as CI: `composer run quality` (lint + test:ci) with the same `DB_*` prefix if needed.
+
+`phpunit.xml` forces `DB_CONNECTION=sqlite` and `DB_DATABASE=database/testing.sqlite` during `php artisan test`, so the test process uses that file; `migrate:fresh` in `test:ci` must target the same database — hence the env prefix when your `.env` uses PostgreSQL.
