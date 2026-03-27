@@ -98,6 +98,34 @@ Liveness: `GET /api/v1/status/liveness` returns unified JSON (`data`, `message`)
 
 Login, logout, and token revocation are out of scope for this foundation pass; see project block plan in `../doc/plan_big.md`.
 
+### Books and rentals (catalog + `book_rents`)
+
+All routes below require `Authorization: Bearer {token}`. Catalog CRUD is available to **any authenticated user** (no admin roles in this iteration).
+
+**Books** (`../doc/blocks/block3_domain.md` rules, `../doc/blocks/block4_domain.md` storage):
+
+| Method | Path | Notes |
+|--------|------|--------|
+| `GET` | `/api/v1/books` | Query: `title`, `author`, `genre` (case-insensitive substring), `available_only`, `sort_by` (`title`,`author`,`genre`,`created_at`,`available_copies`,`total_copies`), `sort_dir`, `per_page` |
+| `POST` | `/api/v1/books` | Create; `available_copies` defaults to `total_copies` if omitted |
+| `GET` | `/api/v1/books/{id}` | |
+| `PATCH` | `/api/v1/books/{id}` | |
+| `DELETE` | `/api/v1/books/{id}` | **409** if any **active** rental exists |
+
+**Rentals** (scoped to the current user; another user’s id yields **404**):
+
+| Method | Path | Notes |
+|--------|------|--------|
+| `GET` | `/api/v1/rentals` | Paginated list |
+| `POST` | `/api/v1/rentals` | Body: `book_id`, `due_date` (must be after now); **409** if no copies |
+| `GET` | `/api/v1/rentals/{id}` | |
+| `PATCH` | `/api/v1/rentals/{id}/extend` | `due_date`; **409** if not `active` |
+| `GET` | `/api/v1/rentals/{id}/reading-progress` | `{ "data": { "reading_progress": … } }` |
+| `PATCH` | `/api/v1/rentals/{id}/reading-progress` | `reading_progress` 0–100; **409** if finished |
+| `POST` | `/api/v1/rentals/{id}/finish` | Returns copy to `available_copies`; **409** if already finished |
+
+**Delete book / rental rows (trade-off, block4):** The app forbids deleting a book while **active** rentals exist. On allowed delete, the DB uses **`ON DELETE CASCADE`** on `book_rents.book_id`, so **finished** rental rows are removed with the book (history for that title is dropped). `book_rents.user_id` uses **`ON DELETE RESTRICT`**. PostgreSQL adds `CHECK` constraints on copy counts and `reading_progress`; SQLite (CI) relies on validation and tests.
+
 Routes: [`routes/api.php`](routes/api.php); API prefix `/api` is registered in [`bootstrap/app.php`](bootstrap/app.php).
 
 ## OpenAPI

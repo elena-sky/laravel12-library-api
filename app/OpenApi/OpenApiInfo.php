@@ -2,10 +2,16 @@
 
 namespace App\OpenApi;
 
+use App\OpenApi\Schemas\Book\BookDataResponse;
+use App\OpenApi\Schemas\Book\BookResource;
 use OpenApi\Attributes as OA;
 
 /**
- * Root OpenAPI metadata; operations are discovered from attributed HTTP contracts under app/Http/Contracts (and implementations).
+ * Root OpenAPI metadata; operations are discovered from attributed HTTP contracts under app/Http/Contracts.
+ * Component schemas live under App\OpenApi\Schemas (imported here so static analysis and OpenAPI scan register them).
+ *
+ * @see BookResource
+ * @see BookDataResponse
  */
 #[OA\OpenApi(
     openapi: '3.0.0',
