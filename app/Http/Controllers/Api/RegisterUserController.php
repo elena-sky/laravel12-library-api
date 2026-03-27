@@ -1,0 +1,35 @@
+<?php
+
+namespace App\Http\Controllers\Api;
+
+use App\Actions\User\CreateUserAction;
+use App\Http\Contracts\RegisterUserControllerInterface;
+use App\Http\Controllers\Controller;
+use App\Http\Requests\User\StoreUserRequest;
+use App\Http\Resources\UserResource;
+use App\Support\ApiResponse;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Arr;
+
+/**
+ * {@inheritDoc}
+ */
+class RegisterUserController extends Controller implements RegisterUserControllerInterface
+{
+    public function __construct(
+        private readonly CreateUserAction $createUser,
+    ) {}
+
+    public function store(StoreUserRequest $request): JsonResponse
+    {
+        $payload = Arr::only($request->validated(), ['name', 'email', 'password']);
+        $user = $this->createUser->execute($payload);
+        $token = $user->createToken('api')->plainTextToken;
+
+        return ApiResponse::created([
+            'user' => UserResource::make($user)->resolve(),
+            'token' => $token,
+            'token_type' => 'Bearer',
+        ], 'Registration successful');
+    }
+}
