@@ -22,22 +22,7 @@ interface CurrentUserControllerInterface
             new OA\Response(
                 response: 200,
                 description: 'Current authenticated user',
-                content: new OA\JsonContent(
-                    required: ['data'],
-                    properties: [
-                        new OA\Property(
-                            property: 'data',
-                            type: 'object',
-                            properties: [
-                                new OA\Property(property: 'id', type: 'integer', example: 1),
-                                new OA\Property(property: 'name', type: 'string'),
-                                new OA\Property(property: 'email', type: 'string', format: 'email'),
-                                new OA\Property(property: 'created_at', type: 'string', format: 'date-time'),
-                                new OA\Property(property: 'updated_at', type: 'string', format: 'date-time'),
-                            ]
-                        ),
-                    ]
-                )
+                content: new OA\JsonContent(ref: '#/components/schemas/UserDataResponse')
             ),
             new OA\Response(response: 401, description: 'Unauthenticated'),
         ]
@@ -51,39 +36,14 @@ interface CurrentUserControllerInterface
         security: [['sanctum' => []]],
         requestBody: new OA\RequestBody(
             required: true,
-            content: new OA\MediaType(
-                mediaType: 'application/json',
-                schema: new OA\Schema(
-                    required: ['name', 'email'],
-                    properties: [
-                        new OA\Property(property: 'name', type: 'string'),
-                        new OA\Property(property: 'email', type: 'string', format: 'email'),
-                    ]
-                )
-            )
+            content: new OA\JsonContent(ref: '#/components/schemas/UpdateUserProfileRequestBody')
         ),
         tags: ['User'],
         responses: [
             new OA\Response(
                 response: 200,
                 description: 'Updated current user profile',
-                content: new OA\JsonContent(
-                    required: ['data', 'message'],
-                    properties: [
-                        new OA\Property(
-                            property: 'data',
-                            type: 'object',
-                            properties: [
-                                new OA\Property(property: 'id', type: 'integer', example: 1),
-                                new OA\Property(property: 'name', type: 'string'),
-                                new OA\Property(property: 'email', type: 'string', format: 'email'),
-                                new OA\Property(property: 'created_at', type: 'string', format: 'date-time'),
-                                new OA\Property(property: 'updated_at', type: 'string', format: 'date-time'),
-                            ]
-                        ),
-                        new OA\Property(property: 'message', type: 'string', example: 'Current user profile updated'),
-                    ]
-                )
+                content: new OA\JsonContent(ref: '#/components/schemas/UserDataResponse')
             ),
             new OA\Response(response: 401, description: 'Unauthenticated'),
             new OA\Response(response: 403, description: 'Forbidden'),
@@ -99,29 +59,14 @@ interface CurrentUserControllerInterface
         security: [['sanctum' => []]],
         requestBody: new OA\RequestBody(
             required: true,
-            content: new OA\MediaType(
-                mediaType: 'application/json',
-                schema: new OA\Schema(
-                    required: ['current_password', 'password', 'password_confirmation'],
-                    properties: [
-                        new OA\Property(property: 'current_password', type: 'string', format: 'password'),
-                        new OA\Property(property: 'password', type: 'string', format: 'password'),
-                        new OA\Property(property: 'password_confirmation', type: 'string', format: 'password'),
-                    ]
-                )
-            )
+            content: new OA\JsonContent(ref: '#/components/schemas/UpdateUserPasswordRequestBody')
         ),
         tags: ['User'],
         responses: [
             new OA\Response(
                 response: 200,
                 description: 'Password updated successfully',
-                content: new OA\JsonContent(
-                    required: ['message'],
-                    properties: [
-                        new OA\Property(property: 'message', type: 'string', example: 'Password updated successfully'),
-                    ]
-                )
+                content: new OA\JsonContent(ref: '#/components/schemas/MessageResponse')
             ),
             new OA\Response(response: 401, description: 'Unauthenticated'),
             new OA\Response(response: 403, description: 'Forbidden'),

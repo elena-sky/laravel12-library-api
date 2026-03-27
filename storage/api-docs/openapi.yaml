@@ -8,6 +8,412 @@ servers:
     url: /api/v1
     description: 'Version 1'
 paths:
+  /books:
+    get:
+      tags:
+        - Book
+      summary: 'List and search books'
+      operationId: booksIndex
+      parameters:
+        -
+          name: title
+          in: query
+          required: false
+          schema:
+            type: string
+        -
+          name: author
+          in: query
+          required: false
+          schema:
+            type: string
+        -
+          name: genre
+          in: query
+          required: false
+          schema:
+            type: string
+        -
+          name: available_only
+          in: query
+          required: false
+          schema:
+            type: boolean
+          example: true
+        -
+          name: sort_by
+          in: query
+          required: false
+          schema:
+            type: string
+            default: title
+            enum:
+              - title
+              - author
+              - genre
+              - created_at
+              - available_copies
+              - total_copies
+        -
+          name: sort_dir
+          in: query
+          required: false
+          schema:
+            type: string
+            default: asc
+            enum:
+              - asc
+              - desc
+        -
+          name: per_page
+          in: query
+          required: false
+          schema:
+            type: integer
+            default: 15
+            maximum: 100
+            minimum: 1
+      responses:
+        '200':
+          description: 'Paginated books'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedBooksResponse'
+        '401':
+          description: Unauthenticated
+        '422':
+          description: 'Validation failed'
+      security:
+        -
+          sanctum: []
+    post:
+      tags:
+        - Book
+      summary: 'Create book'
+      operationId: booksStore
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StoreBookRequestBody'
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BookDataResponse'
+        '401':
+          description: Unauthenticated
+        '422':
+          description: 'Validation failed'
+      security:
+        -
+          sanctum: []
+  '/books/{book}':
+    get:
+      tags:
+        - Book
+      summary: 'Get book by id'
+      operationId: booksShow
+      parameters:
+        -
+          name: book
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Book
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BookDataResponse'
+        '401':
+          description: Unauthenticated
+        '404':
+          description: 'Not found'
+      security:
+        -
+          sanctum: []
+    delete:
+      tags:
+        - Book
+      summary: 'Delete book (forbidden if active rentals exist)'
+      operationId: booksDestroy
+      parameters:
+        -
+          name: book
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Deleted
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MessageResponse'
+        '401':
+          description: Unauthenticated
+        '404':
+          description: 'Not found'
+        '409':
+          description: 'Active rentals'
+      security:
+        -
+          sanctum: []
+    patch:
+      tags:
+        - Book
+      summary: 'Update book'
+      operationId: booksUpdate
+      parameters:
+        -
+          name: book
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateBookRequestBody'
+      responses:
+        '200':
+          description: Updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BookDataResponse'
+        '401':
+          description: Unauthenticated
+        '404':
+          description: 'Not found'
+        '409':
+          description: Conflict
+        '422':
+          description: 'Validation failed'
+      security:
+        -
+          sanctum: []
+  /rentals:
+    get:
+      tags:
+        - BookRent
+      summary: 'List my rentals'
+      operationId: rentalsIndex
+      parameters:
+        -
+          name: per_page
+          in: query
+          required: false
+          schema:
+            type: integer
+            default: 15
+            maximum: 100
+            minimum: 1
+      responses:
+        '200':
+          description: 'Paginated rentals'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedBookRentsResponse'
+        '401':
+          description: Unauthenticated
+      security:
+        -
+          sanctum: []
+    post:
+      tags:
+        - BookRent
+      summary: 'Rent a book'
+      operationId: rentalsStore
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RentBookRequestBody'
+      responses:
+        '201':
+          description: 'Rental created'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BookRentDataResponse'
+        '401':
+          description: Unauthenticated
+        '409':
+          description: 'Not available'
+        '422':
+          description: 'Validation failed'
+      security:
+        -
+          sanctum: []
+  '/rentals/{bookRent}':
+    get:
+      tags:
+        - BookRent
+      summary: 'Get my rental'
+      operationId: rentalsShow
+      parameters:
+        -
+          name: bookRent
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Rental
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BookRentDataResponse'
+        '401':
+          description: Unauthenticated
+        '404':
+          description: 'Not found'
+      security:
+        -
+          sanctum: []
+  '/rentals/{bookRent}/extend':
+    patch:
+      tags:
+        - BookRent
+      summary: 'Extend active rental'
+      operationId: rentalsExtend
+      parameters:
+        -
+          name: bookRent
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ExtendRentRequestBody'
+      responses:
+        '200':
+          description: Extended
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BookRentDataResponse'
+        '401':
+          description: Unauthenticated
+        '404':
+          description: 'Not found'
+        '409':
+          description: 'Not active'
+        '422':
+          description: 'Validation failed'
+      security:
+        -
+          sanctum: []
+  '/rentals/{bookRent}/reading-progress':
+    get:
+      tags:
+        - BookRent
+      summary: 'Get reading progress'
+      operationId: rentalsReadingProgressShow
+      parameters:
+        -
+          name: bookRent
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Progress
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ReadingProgressDataResponse'
+        '401':
+          description: Unauthenticated
+        '404':
+          description: 'Not found'
+      security:
+        -
+          sanctum: []
+    patch:
+      tags:
+        - BookRent
+      summary: 'Update reading progress (active only)'
+      operationId: rentalsReadingProgressUpdate
+      parameters:
+        -
+          name: bookRent
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateReadingProgressRequestBody'
+      responses:
+        '200':
+          description: Updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BookRentDataResponse'
+        '401':
+          description: Unauthenticated
+        '404':
+          description: 'Not found'
+        '409':
+          description: 'Finished rental'
+        '422':
+          description: 'Validation failed'
+      security:
+        -
+          sanctum: []
+  '/rentals/{bookRent}/finish':
+    post:
+      tags:
+        - BookRent
+      summary: 'Finish rental and return copy'
+      operationId: rentalsFinish
+      parameters:
+        -
+          name: bookRent
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Finished
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BookRentDataResponse'
+        '401':
+          description: Unauthenticated
+        '404':
+          description: 'Not found'
+        '409':
+          description: 'Already finished'
+      security:
+        -
+          sanctum: []
   /user:
     get:
       tags:
@@ -20,11 +426,7 @@ paths:
           content:
             application/json:
               schema:
-                required:
-                  - data
-                properties:
-                  data: { properties: { id: { type: integer, example: 1 }, name: { type: string }, email: { type: string, format: email }, created_at: { type: string, format: date-time }, updated_at: { type: string, format: date-time } }, type: object }
-                type: object
+                $ref: '#/components/schemas/UserDataResponse'
         '401':
           description: Unauthenticated
       security:
@@ -40,29 +442,14 @@ paths:
         content:
           application/json:
             schema:
-              required:
-                - name
-                - email
-              properties:
-                name:
-                  type: string
-                email:
-                  type: string
-                  format: email
-              type: object
+              $ref: '#/components/schemas/UpdateUserProfileRequestBody'
       responses:
         '200':
           description: 'Updated current user profile'
           content:
             application/json:
               schema:
-                required:
-                  - data
-                  - message
-                properties:
-                  data: { properties: { id: { type: integer, example: 1 }, name: { type: string }, email: { type: string, format: email }, created_at: { type: string, format: date-time }, updated_at: { type: string, format: date-time } }, type: object }
-                  message: { type: string, example: 'Current user profile updated' }
-                type: object
+                $ref: '#/components/schemas/UserDataResponse'
         '401':
           description: Unauthenticated
         '403':
@@ -83,32 +470,14 @@ paths:
         content:
           application/json:
             schema:
-              required:
-                - current_password
-                - password
-                - password_confirmation
-              properties:
-                current_password:
-                  type: string
-                  format: password
-                password:
-                  type: string
-                  format: password
-                password_confirmation:
-                  type: string
-                  format: password
-              type: object
+              $ref: '#/components/schemas/UpdateUserPasswordRequestBody'
       responses:
         '200':
           description: 'Password updated successfully'
           content:
             application/json:
               schema:
-                required:
-                  - message
-                properties:
-                  message: { type: string, example: 'Password updated successfully' }
-                type: object
+                $ref: '#/components/schemas/MessageResponse'
         '401':
           description: Unauthenticated
         '403':
@@ -129,40 +498,14 @@ paths:
         content:
           application/json:
             schema:
-              required:
-                - name
-                - email
-                - password
-                - password_confirmation
-              properties:
-                name:
-                  type: string
-                  example: 'Ada Lovelace'
-                email:
-                  type: string
-                  format: email
-                  example: ada@example.com
-                password:
-                  type: string
-                  format: password
-                  example: correct-horse-battery-staple
-                password_confirmation:
-                  type: string
-                  format: password
-              type: object
+              $ref: '#/components/schemas/RegisterRequestBody'
       responses:
         '201':
           description: 'User created; returns profile and API token'
           content:
             application/json:
               schema:
-                required:
-                  - data
-                  - message
-                properties:
-                  data: { required: [user, token, token_type], properties: { user: { properties: { id: { type: integer, example: 1 }, name: { type: string }, email: { type: string, format: email }, created_at: { type: string, format: date-time }, updated_at: { type: string, format: date-time } }, type: object }, token: { type: string }, token_type: { type: string, example: Bearer } }, type: object }
-                  message: { type: string, example: 'Registration successful' }
-                type: object
+                $ref: '#/components/schemas/RegistrationResponse'
         '422':
           description: 'Validation failed'
   /status/liveness:
@@ -186,12 +529,357 @@ paths:
                   message: { type: string, example: 'Liveness check passed' }
                 type: object
 components:
+  schemas:
+    BookDataResponse:
+      required:
+        - data
+      properties:
+        data:
+          $ref: '#/components/schemas/BookResource'
+        message:
+          type: string
+          example: 'Book updated'
+      type: object
+    BookResource:
+      required:
+        - id
+        - title
+        - author
+        - genre
+        - total_copies
+        - available_copies
+        - created_at
+        - updated_at
+      properties:
+        id:
+          type: integer
+          example: 1
+        title:
+          type: string
+        author:
+          type: string
+        genre:
+          type: string
+        description:
+          type: string
+          nullable: true
+        total_copies:
+          type: integer
+        available_copies:
+          type: integer
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+      type: object
+    PaginatedBooksResponse:
+      required:
+        - data
+        - meta
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/BookResource'
+        meta:
+          $ref: '#/components/schemas/PaginationMeta'
+      type: object
+    StoreBookRequestBody:
+      required:
+        - title
+        - author
+        - genre
+        - total_copies
+      properties:
+        title:
+          type: string
+        author:
+          type: string
+        genre:
+          type: string
+        description:
+          type: string
+          nullable: true
+        total_copies:
+          type: integer
+          minimum: 0
+        available_copies:
+          type: integer
+          minimum: 0
+      type: object
+    UpdateBookRequestBody:
+      properties:
+        title:
+          type: string
+        author:
+          type: string
+        genre:
+          type: string
+        description:
+          type: string
+          nullable: true
+        total_copies:
+          type: integer
+          minimum: 0
+        available_copies:
+          type: integer
+          minimum: 0
+      type: object
+    BookRentDataResponse:
+      required:
+        - data
+      properties:
+        data:
+          $ref: '#/components/schemas/BookRentResource'
+        message:
+          type: string
+          example: 'Rental extended'
+      type: object
+    BookRentResource:
+      required:
+        - id
+        - book_id
+        - status
+        - rented_at
+        - due_date
+        - reading_progress
+        - extended_count
+        - created_at
+        - updated_at
+      properties:
+        id:
+          type: integer
+          example: 1
+        book_id:
+          type: integer
+        status:
+          type: string
+          enum:
+            - active
+            - finished
+        rented_at:
+          type: string
+          format: date-time
+        due_date:
+          type: string
+          format: date-time
+        returned_at:
+          type: string
+          format: date-time
+          nullable: true
+        reading_progress:
+          type: integer
+          maximum: 100
+          minimum: 0
+        extended_count:
+          type: integer
+          minimum: 0
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+        book:
+          oneOf:
+            -
+              $ref: '#/components/schemas/BookResource'
+          nullable: true
+      type: object
+    ExtendRentRequestBody:
+      required:
+        - due_date
+      properties:
+        due_date:
+          type: string
+          format: date-time
+      type: object
+    PaginatedBookRentsResponse:
+      required:
+        - data
+        - meta
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/BookRentResource'
+        meta:
+          $ref: '#/components/schemas/PaginationMeta'
+      type: object
+    ReadingProgressDataResponse:
+      required:
+        - data
+      properties:
+        data:
+          properties:
+            reading_progress:
+              type: integer
+              example: 42
+              maximum: 100
+              minimum: 0
+          type: object
+      type: object
+    RentBookRequestBody:
+      required:
+        - book_id
+        - due_date
+      properties:
+        book_id:
+          type: integer
+          example: 1
+        due_date:
+          type: string
+          format: date-time
+      type: object
+    UpdateReadingProgressRequestBody:
+      required:
+        - reading_progress
+      properties:
+        reading_progress:
+          type: integer
+          maximum: 100
+          minimum: 0
+      type: object
+    MessageResponse:
+      required:
+        - message
+      properties:
+        message:
+          type: string
+          example: 'Book deleted'
+      type: object
+    PaginationMeta:
+      required:
+        - current_page
+        - per_page
+        - total
+        - last_page
+      properties:
+        current_page:
+          type: integer
+        per_page:
+          type: integer
+        total:
+          type: integer
+        last_page:
+          type: integer
+      type: object
+    RegisterRequestBody:
+      required:
+        - name
+        - email
+        - password
+        - password_confirmation
+      properties:
+        name:
+          type: string
+        email:
+          type: string
+          format: email
+        password:
+          type: string
+          format: password
+        password_confirmation:
+          type: string
+          format: password
+      type: object
+    RegistrationResponse:
+      required:
+        - data
+        - message
+      properties:
+        data:
+          required:
+            - user
+            - token
+            - token_type
+          properties:
+            user:
+              $ref: '#/components/schemas/UserResource'
+            token:
+              type: string
+            token_type:
+              type: string
+              example: Bearer
+          type: object
+        message:
+          type: string
+          example: 'Registration successful'
+      type: object
+    UpdateUserPasswordRequestBody:
+      required:
+        - current_password
+        - password
+        - password_confirmation
+      properties:
+        current_password:
+          type: string
+          format: password
+        password:
+          type: string
+          format: password
+        password_confirmation:
+          type: string
+          format: password
+      type: object
+    UpdateUserProfileRequestBody:
+      required:
+        - name
+        - email
+      properties:
+        name:
+          type: string
+        email:
+          type: string
+          format: email
+      type: object
+    UserDataResponse:
+      required:
+        - data
+      properties:
+        data:
+          $ref: '#/components/schemas/UserResource'
+        message:
+          type: string
+          example: 'Current user profile updated'
+      type: object
+    UserResource:
+      required:
+        - id
+        - name
+        - email
+        - created_at
+        - updated_at
+      properties:
+        id:
+          type: integer
+          example: 1
+        name:
+          type: string
+        email:
+          type: string
+          format: email
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+      type: object
   securitySchemes:
     sanctum:
       type: http
       description: 'Laravel Sanctum personal access token: Authorization: Bearer {token}'
       scheme: bearer
 tags:
+  -
+    name: Book
+    description: Book
+  -
+    name: BookRent
+    description: BookRent
   -
     name: User
     description: User
