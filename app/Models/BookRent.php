@@ -72,6 +72,17 @@ class BookRent extends Model
         return $this->belongsTo(Book::class);
     }
 
+    /**
+     * Find a rent by primary key scoped to the given owner.
+     */
+    public static function findOwnedByKey(int|string $id, int $userId): ?self
+    {
+        return self::query()
+            ->whereKey($id)
+            ->where('user_id', $userId)
+            ->first();
+    }
+
     public function isActive(): bool
     {
         return $this->status === BookRentStatus::Active;

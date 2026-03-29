@@ -63,25 +63,21 @@ class AppServiceProvider extends ServiceProvider
     }
 
     /**
-     * Resolve `{bookRent}` to a rental owned by the authenticated user.
+     * Register `{bookRent}` using {@see BookRent::findOwnedByKey()}.
      *
      * Routes using this parameter must be protected by authentication middleware
-     * (e.g. `auth:sanctum`); the binder does not re-check auth and only enforces
-     * ownership. If the id does not belong to the current user, resolution fails
-     * with {@see ModelNotFoundException} (HTTP 404) so resource existence is not
-     * leaked to other tenants.
+     * (e.g. `auth:sanctum`); the binder passes the current user id and does not
+     * re-check auth. Ownership is enforced via {@see BookRent::scopeOwnedBy()}.
+     * If the id does not belong to the current user, resolution fails with
+     * {@see ModelNotFoundException} (HTTP 404) so resource existence is not leaked
+     * to other tenants.
      *
      * Regression: `tests/Feature/Api/BookRentalTest.php` (`test_cannot_access_another_users_rent`).
      */
     private function registerBookRentRouteBinding(): void
     {
         Route::bind('bookRent', function (string $value): BookRent {
-            $userId = auth()->id();
-
-            $rent = BookRent::query()
-                ->whereKey($value)
-                ->where('user_id', $userId)
-                ->first();
+            $rent = BookRent::findOwnedByKey($value, (int) auth()->id());
 
             if ($rent === null) {
                 throw (new ModelNotFoundException)->setModel(BookRent::class, [$value]);
