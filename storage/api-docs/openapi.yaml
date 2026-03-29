@@ -487,6 +487,53 @@ paths:
       security:
         -
           sanctum: []
+  /login:
+    post:
+      tags:
+        - User
+      summary: 'Log in with email and password'
+      operationId: loginUser
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoginRequestBody'
+      responses:
+        '200':
+          description: 'Authenticated; returns profile and API token'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RegistrationResponse'
+        '401':
+          description: 'Invalid credentials'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MessageResponse'
+        '422':
+          description: 'Validation failed'
+        '429':
+          description: 'Too many requests'
+  /logout:
+    post:
+      tags:
+        - User
+      summary: 'Log out (revoke current token)'
+      operationId: logoutUser
+      responses:
+        '200':
+          description: 'Current token revoked'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MessageResponse'
+        '401':
+          description: Unauthenticated
+      security:
+        -
+          sanctum: []
   /register:
     post:
       tags:
@@ -765,6 +812,18 @@ components:
           type: integer
         last_page:
           type: integer
+      type: object
+    LoginRequestBody:
+      required:
+        - email
+        - password
+      properties:
+        email:
+          type: string
+          format: email
+        password:
+          type: string
+          format: password
       type: object
     RegisterRequestBody:
       required:

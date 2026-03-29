@@ -5,6 +5,7 @@ namespace Tests\Feature\Api;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Hash;
+use Laravel\Sanctum\PersonalAccessToken;
 use Tests\TestCase;
 
 class UserAccountTest extends TestCase
@@ -132,5 +133,103 @@ class UserAccountTest extends TestCase
             ])
             ->assertStatus(422)
             ->assertJsonPath('message', 'Validation failed');
+    }
+
+    public function test_user_can_login_successfully(): void
+    {
+        User::factory()->create([
+            'email' => 'login@example.com',
+            'password' => self::SAFE_PASSWORD,
+        ]);
+
+        $response = $this->postJson('/api/v1/login', [
+            'email' => 'login@example.com',
+            'password' => self::SAFE_PASSWORD,
+        ]);
+
+        $response->assertOk()
+            ->assertJsonPath('message', 'Login successful')
+            ->assertJsonStructure([
+                'data' => [
+                    'user' => ['id', 'name', 'email', 'created_at', 'updated_at'],
+                    'token',
+                    'token_type',
+                ],
+            ]);
+
+        $response->assertJsonMissingPath('data.user.password');
+        $response->assertJsonMissingPath('data.password');
+    }
+
+    public function test_login_rejects_invalid_credentials_for_wrong_password(): void
+    {
+        User::factory()->create([
+            'email' => 'u@example.com',
+            'password' => self::SAFE_PASSWORD,
+        ]);
+
+        $this->postJson('/api/v1/login', [
+            'email' => 'u@example.com',
+            'password' => 'wrong-password',
+        ])
+            ->assertUnauthorized()
+            ->assertJsonPath('message', 'Invalid credentials');
+    }
+
+    public function test_login_rejects_invalid_credentials_for_unknown_email(): void
+    {
+        $this->postJson('/api/v1/login', [
+            'email' => 'missing@example.com',
+            'password' => self::SAFE_PASSWORD,
+        ])
+            ->assertUnauthorized()
+            ->assertJsonPath('message', 'Invalid credentials');
+    }
+
+    public function test_login_validation_error_for_invalid_email(): void
+    {
+        $this->postJson('/api/v1/login', [
+            'email' => 'not-valid-email',
+            'password' => 'secret',
+        ])
+            ->assertStatus(422)
+            ->assertJsonPath('message', 'Validation failed');
+    }
+
+    public function test_logout_revokes_current_token(): void
+    {
+        User::factory()->create([
+            'email' => 'out@example.com',
+            'password' => self::SAFE_PASSWORD,
+        ]);
+
+        $token = $this->postJson('/api/v1/login', [
+            'email' => 'out@example.com',
+            'password' => self::SAFE_PASSWORD,
+        ])->assertOk()->json('data.token');
+
+        $this->withToken($token)
+            ->postJson('/api/v1/logout')
+            ->assertOk()
+            ->assertJsonPath('message', 'Logout successful')
+            ->assertJsonMissingPath('data');
+
+        $this->assertNull(PersonalAccessToken::findToken($token));
+
+        // Same PHPUnit app instance serves multiple HTTP calls; clear resolved auth between them.
+        $this->flushHeaders();
+        $this->app->make('auth')->forgetGuards();
+
+        $this->getJson('/api/v1/user', [
+            'Authorization' => 'Bearer '.$token,
+        ])
+            ->assertUnauthorized()
+            ->assertJsonPath('message', 'Unauthenticated');
+    }
+
+    public function test_guest_cannot_logout(): void
+    {
+        $this->postJson('/api/v1/logout')
+            ->assertUnauthorized();
     }
 }

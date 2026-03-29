@@ -3,6 +3,8 @@
 use App\Http\Contracts\BookControllerInterface;
 use App\Http\Contracts\BookRentControllerInterface;
 use App\Http\Contracts\CurrentUserControllerInterface;
+use App\Http\Contracts\LoginUserControllerInterface;
+use App\Http\Contracts\LogoutUserControllerInterface;
 use App\Http\Contracts\RegisterUserControllerInterface;
 use App\Http\Contracts\StatusControllerInterface;
 use Illuminate\Support\Facades\Route;
@@ -10,8 +12,11 @@ use Illuminate\Support\Facades\Route;
 Route::get('/status/liveness', [StatusControllerInterface::class, 'liveness']);
 
 Route::post('/register', [RegisterUserControllerInterface::class, 'store']);
+Route::post('/login', [LoginUserControllerInterface::class, 'login'])
+    ->middleware('throttle:login');
 
 Route::middleware('auth:sanctum')->group(function (): void {
+    Route::post('/logout', [LogoutUserControllerInterface::class, 'logout']);
     Route::get('/user', [CurrentUserControllerInterface::class, 'show']);
     Route::patch('/user', [CurrentUserControllerInterface::class, 'update']);
     Route::put('/user/password', [CurrentUserControllerInterface::class, 'updatePassword']);

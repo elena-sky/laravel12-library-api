@@ -27,6 +27,7 @@ Backend API (Laravel 12, API-first). Authentication: Laravel Sanctum.
 │   │   │   └── UpdateReadingProgressAction.php
 │   │   └── User/
 │   │       ├── CreateUserAction.php
+│   │       ├── LoginUserAction.php
 │   │       ├── UpdateUserAction.php
 │   │       └── UpdateUserPasswordAction.php
 │   ├── Enums/
@@ -39,6 +40,8 @@ Backend API (Laravel 12, API-first). Authentication: Laravel Sanctum.
 │   │   │   ├── BookControllerInterface.php
 │   │   │   ├── BookRentControllerInterface.php
 │   │   │   ├── CurrentUserControllerInterface.php
+│   │   │   ├── LoginUserControllerInterface.php
+│   │   │   ├── LogoutUserControllerInterface.php
 │   │   │   ├── RegisterUserControllerInterface.php
 │   │   │   └── StatusControllerInterface.php
 │   │   ├── Controllers/
@@ -47,6 +50,8 @@ Backend API (Laravel 12, API-first). Authentication: Laravel Sanctum.
 │   │   │       ├── BookController.php
 │   │   │       ├── BookRentController.php
 │   │   │       ├── CurrentUserController.php
+│   │   │       ├── LoginUserController.php
+│   │   │       ├── LogoutUserController.php
 │   │   │       ├── RegisterUserController.php
 │   │   │       └── StatusController.php
 │   │   ├── Requests/
@@ -64,6 +69,7 @@ Backend API (Laravel 12, API-first). Authentication: Laravel Sanctum.
 │   │   │   │   ├── UpdateBookRentReadingProgressRequest.php
 │   │   │   │   └── ViewBookRentRequest.php
 │   │   │   └── User/
+│   │   │       ├── LoginUserRequest.php
 │   │   │       ├── StoreUserRequest.php
 │   │   │       ├── UpdateUserPasswordRequest.php
 │   │   │       └── UpdateUserRequest.php
@@ -96,6 +102,7 @@ Backend API (Laravel 12, API-first). Authentication: Laravel Sanctum.
 │   │       │   ├── RentBookRequestBody.php
 │   │       │   └── UpdateReadingProgressRequestBody.php
 │   │       └── User/
+│   │           ├── LoginRequestBody.php
 │   │           ├── RegisterRequestBody.php
 │   │           ├── RegistrationResponse.php
 │   │           ├── UpdateUserPasswordRequestBody.php
@@ -215,11 +222,11 @@ Liveness: `GET /api/v1/status/liveness` returns unified JSON (`data`, `message`)
 ### User account (Sanctum foundation)
 
 - `POST /api/v1/register` — create user; response includes `data.user`, `data.token`, `data.token_type` (`Bearer`).
+- `POST /api/v1/login` — email + password; same token payload as register; **401** with `Invalid credentials` when the pair is wrong (neutral message). Rate limited (`throttle:login`, 5/minute per email + IP).
+- `POST /api/v1/logout` — authenticated; revokes the **current** bearer token (`PersonalAccessToken` for this `Authorization` header); response `{"message":"Logout successful"}` (no `data` key).
 - `GET /api/v1/user` — current profile; header `Authorization: Bearer {token}`.
 - `PATCH /api/v1/user` — update `name` and `email` (authenticated).
 - `PUT /api/v1/user/password` — change password (`current_password`, `password`, `password_confirmation`).
-
-Login, logout, and token revocation are not implemented in this API.
 
 ### Books and rentals (catalog + `book_rents`)
 
