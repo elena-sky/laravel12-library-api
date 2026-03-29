@@ -3,6 +3,7 @@
 namespace App\Support;
 
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Http\Resources\Json\ResourceCollection;
 use Illuminate\Pagination\LengthAwarePaginator;
 
@@ -60,6 +61,30 @@ final class ApiResponse
         }
 
         return response()->json($payload, $status);
+    }
+
+    /**
+     * JSON envelope with `data` from a {@see JsonResource} and optional `message` (same shape as {@see success}).
+     */
+    public static function resource(JsonResource $resource, ?string $message = null, int $status = 200): JsonResponse
+    {
+        return self::success(self::materializeResource($resource), $message, $status);
+    }
+
+    /**
+     * Resolved resource payload for embedding inside a larger `data` object (e.g. registration with `user` + `token`).
+     */
+    public static function resourceData(JsonResource $resource): mixed
+    {
+        return self::materializeResource($resource);
+    }
+
+    /**
+     * Single call site for {@see JsonResource::resolve()} in this class.
+     */
+    private static function materializeResource(JsonResource $resource): mixed
+    {
+        return $resource->resolve();
     }
 
     /**

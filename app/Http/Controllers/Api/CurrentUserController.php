@@ -34,7 +34,7 @@ class CurrentUserController extends Controller implements CurrentUserControllerI
 
         $this->authorize('view', $user);
 
-        return ApiResponse::success(UserResource::make($user)->resolve());
+        return ApiResponse::resource(UserResource::make($user));
     }
 
     public function update(UpdateUserRequest $request): JsonResponse
@@ -47,7 +47,7 @@ class CurrentUserController extends Controller implements CurrentUserControllerI
         $this->authorize('update', $user);
         $updated = $this->updateUser->execute($user, $request->validated());
 
-        return ApiResponse::success(UserResource::make($updated)->resolve(), 'Current user profile updated');
+        return ApiResponse::resource(UserResource::make($updated), 'Current user profile updated');
     }
 
     public function updatePassword(UpdateUserPasswordRequest $request): JsonResponse
