@@ -1,5 +1,9 @@
 <?php
 
+/**
+ * These routes are registered under prefix api/v1 (see bootstrap/app.php apiPrefix). Do not nest Route::prefix('v1') here.
+ */
+
 use App\Http\Contracts\BookControllerInterface;
 use App\Http\Contracts\BookRentControllerInterface;
 use App\Http\Contracts\CurrentUserControllerInterface;
@@ -17,17 +21,22 @@ Route::post('/login', [LoginUserControllerInterface::class, 'login'])
 
 Route::middleware('auth:sanctum')->group(function (): void {
     Route::post('/logout', [LogoutUserControllerInterface::class, 'logout']);
-    Route::get('/user', [CurrentUserControllerInterface::class, 'show']);
-    Route::patch('/user', [CurrentUserControllerInterface::class, 'update']);
-    Route::put('/user/password', [CurrentUserControllerInterface::class, 'updatePassword']);
+
+    Route::prefix('user')->group(function (): void {
+        Route::get('/', [CurrentUserControllerInterface::class, 'show']);
+        Route::patch('/', [CurrentUserControllerInterface::class, 'update']);
+        Route::put('/password', [CurrentUserControllerInterface::class, 'updatePassword']);
+    });
 
     Route::apiResource('books', BookControllerInterface::class);
 
-    Route::get('/rentals', [BookRentControllerInterface::class, 'index']);
-    Route::post('/rentals', [BookRentControllerInterface::class, 'store']);
-    Route::get('/rentals/{bookRent}', [BookRentControllerInterface::class, 'show']);
-    Route::patch('/rentals/{bookRent}/extend', [BookRentControllerInterface::class, 'extend']);
-    Route::get('/rentals/{bookRent}/reading-progress', [BookRentControllerInterface::class, 'showReadingProgress']);
-    Route::patch('/rentals/{bookRent}/reading-progress', [BookRentControllerInterface::class, 'updateReadingProgress']);
-    Route::post('/rentals/{bookRent}/finish', [BookRentControllerInterface::class, 'finish']);
+    Route::prefix('rentals')->group(function (): void {
+        Route::get('/', [BookRentControllerInterface::class, 'index']);
+        Route::post('/', [BookRentControllerInterface::class, 'store']);
+        Route::get('/{bookRent}', [BookRentControllerInterface::class, 'show']);
+        Route::patch('/{bookRent}/extend', [BookRentControllerInterface::class, 'extend']);
+        Route::get('/{bookRent}/reading-progress', [BookRentControllerInterface::class, 'showReadingProgress']);
+        Route::patch('/{bookRent}/reading-progress', [BookRentControllerInterface::class, 'updateReadingProgress']);
+        Route::post('/{bookRent}/finish', [BookRentControllerInterface::class, 'finish']);
+    });
 });
