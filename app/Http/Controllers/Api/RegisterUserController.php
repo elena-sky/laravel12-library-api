@@ -27,7 +27,7 @@ class RegisterUserController extends Controller implements RegisterUserControlle
         $token = $user->createToken('api')->plainTextToken;
 
         return ApiResponse::created([
-            'user' => UserResource::make($user)->resolve(),
+            'user' => ApiResponse::resourceData(UserResource::make($user)),
             'token' => $token,
             'token_type' => 'Bearer',
         ], 'Registration successful');
