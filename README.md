@@ -8,6 +8,129 @@ Backend API (Laravel 12, API-first). Authentication: Laravel Sanctum.
 - `APP_NAME` in `.env`: **Library API**.
 - PostgreSQL: `DB_DATABASE=library`, `DB_USERNAME=library_user` (database name and DB login are separate from the app folder name).
 
+## Project structure
+
+```text
+.
+├── app/
+│   ├── Actions/
+│   │   ├── Book/
+│   │   │   ├── CreateBookAction.php
+│   │   │   ├── DeleteBookAction.php
+│   │   │   ├── ListBooksAction.php
+│   │   │   └── UpdateBookAction.php
+│   │   ├── BookRent/
+│   │   │   ├── ExtendBookRentAction.php
+│   │   │   ├── FinishBookRentAction.php
+│   │   │   ├── ListBookRentsAction.php
+│   │   │   ├── RentBookAction.php
+│   │   │   └── UpdateReadingProgressAction.php
+│   │   └── User/
+│   │       ├── CreateUserAction.php
+│   │       ├── UpdateUserAction.php
+│   │       └── UpdateUserPasswordAction.php
+│   ├── Enums/
+│   │   └── BookRentStatus.php
+│   ├── Exceptions/
+│   │   ├── ApiException.php
+│   │   └── ResourceConflictException.php
+│   ├── Http/
+│   │   ├── Contracts/
+│   │   │   ├── BookControllerInterface.php
+│   │   │   ├── BookRentControllerInterface.php
+│   │   │   ├── CurrentUserControllerInterface.php
+│   │   │   ├── RegisterUserControllerInterface.php
+│   │   │   └── StatusControllerInterface.php
+│   │   ├── Controllers/
+│   │   │   ├── Controller.php
+│   │   │   └── Api/
+│   │   │       ├── BookController.php
+│   │   │       ├── BookRentController.php
+│   │   │       ├── CurrentUserController.php
+│   │   │       ├── RegisterUserController.php
+│   │   │       └── StatusController.php
+│   │   ├── Requests/
+│   │   │   ├── Book/
+│   │   │   │   ├── DeleteBookRequest.php
+│   │   │   │   ├── ListBooksRequest.php
+│   │   │   │   ├── ShowBookRequest.php
+│   │   │   │   ├── StoreBookRequest.php
+│   │   │   │   └── UpdateBookRequest.php
+│   │   │   ├── BookRent/
+│   │   │   │   ├── ExtendBookRentRequest.php
+│   │   │   │   ├── FinishBookRentRequest.php
+│   │   │   │   ├── ListBookRentsRequest.php
+│   │   │   │   ├── StoreBookRentRequest.php
+│   │   │   │   ├── UpdateBookRentReadingProgressRequest.php
+│   │   │   │   └── ViewBookRentRequest.php
+│   │   │   └── User/
+│   │   │       ├── StoreUserRequest.php
+│   │   │       ├── UpdateUserPasswordRequest.php
+│   │   │       └── UpdateUserRequest.php
+│   │   └── Resources/
+│   │       ├── BookResource.php
+│   │       ├── BookRentResource.php
+│   │       └── UserResource.php
+│   ├── Models/
+│   │   ├── Book.php
+│   │   ├── BookRent.php
+│   │   └── User.php
+│   ├── OpenApi/
+│   │   ├── OpenApiInfo.php
+│   │   └── Schemas/
+│   │       ├── Common/
+│   │       │   ├── MessageResponse.php
+│   │       │   └── PaginationMeta.php
+│   │       ├── Book/
+│   │       │   ├── BookDataResponse.php
+│   │       │   ├── BookResource.php
+│   │       │   ├── PaginatedBooksResponse.php
+│   │       │   ├── StoreBookRequestBody.php
+│   │       │   └── UpdateBookRequestBody.php
+│   │       ├── BookRent/
+│   │       │   ├── BookRentDataResponse.php
+│   │       │   ├── BookRentResource.php
+│   │       │   ├── ExtendRentRequestBody.php
+│   │       │   ├── PaginatedBookRentsResponse.php
+│   │       │   ├── ReadingProgressDataResponse.php
+│   │       │   ├── RentBookRequestBody.php
+│   │       │   └── UpdateReadingProgressRequestBody.php
+│   │       └── User/
+│   │           ├── RegisterRequestBody.php
+│   │           ├── RegistrationResponse.php
+│   │           ├── UpdateUserPasswordRequestBody.php
+│   │           ├── UpdateUserProfileRequestBody.php
+│   │           ├── UserDataResponse.php
+│   │           └── UserResource.php
+│   ├── Policies/
+│   │   ├── BookPolicy.php
+│   │   ├── BookRentPolicy.php
+│   │   └── UserPolicy.php
+│   ├── Providers/
+│   │   └── AppServiceProvider.php
+│   └── Support/
+│       └── ApiResponse.php
+├── database/
+│   ├── factories/
+│   │   ├── BookFactory.php
+│   │   ├── BookRentFactory.php
+│   │   └── UserFactory.php
+│   └── migrations/
+│       ├── 0001_01_01_000000_create_users_table.php
+│       ├── 0001_01_01_000001_create_cache_table.php
+│       ├── 0001_01_01_000002_create_jobs_table.php
+│       ├── 2026_03_26_153657_create_personal_access_tokens_table.php
+│       └── 2026_03_27_120000_create_books_and_book_rents_tables.php
+├── routes/
+│   ├── api.php
+│   ├── console.php
+│   └── web.php
+└── tests/
+    ├── Feature/
+    ├── Unit/
+    └── TestCase.php
+```
+
 ## Requirements
 
 - PHP **8.3+** — use the **same** `php` binary for Composer and Artisan (on macOS, default `php` may be older, e.g. MAMP; then set an explicit path).
@@ -96,13 +219,13 @@ Liveness: `GET /api/v1/status/liveness` returns unified JSON (`data`, `message`)
 - `PATCH /api/v1/user` — update `name` and `email` (authenticated).
 - `PUT /api/v1/user/password` — change password (`current_password`, `password`, `password_confirmation`).
 
-Login, logout, and token revocation are out of scope for this foundation pass; see project block plan in `../doc/plan_big.md`.
+Login, logout, and token revocation are not implemented in this API.
 
 ### Books and rentals (catalog + `book_rents`)
 
 All routes below require `Authorization: Bearer {token}`. Catalog CRUD is available to **any authenticated user** (no admin roles in this iteration).
 
-**Books** (`../doc/blocks/block3_domain.md` rules, `../doc/blocks/block4_domain.md` storage):
+**Books:**
 
 | Method | Path | Notes |
 |--------|------|--------|
@@ -124,7 +247,7 @@ All routes below require `Authorization: Bearer {token}`. Catalog CRUD is availa
 | `PATCH` | `/api/v1/rentals/{id}/reading-progress` | `reading_progress` 0–100; **409** if finished |
 | `POST` | `/api/v1/rentals/{id}/finish` | Returns copy to `available_copies`; **409** if already finished |
 
-**Delete book / rental rows (trade-off, block4):** The app forbids deleting a book while **active** rentals exist. On allowed delete, the DB uses **`ON DELETE CASCADE`** on `book_rents.book_id`, so **finished** rental rows are removed with the book (history for that title is dropped). `book_rents.user_id` uses **`ON DELETE RESTRICT`**. PostgreSQL adds `CHECK` constraints on copy counts and `reading_progress`; SQLite (CI) relies on validation and tests.
+**Delete book / rental rows (design trade-off):** The app forbids deleting a book while **active** rentals exist. On allowed delete, the DB uses **`ON DELETE CASCADE`** on `book_rents.book_id`, so **finished** rental rows are removed with the book (history for that title is dropped). `book_rents.user_id` uses **`ON DELETE RESTRICT`**. PostgreSQL adds `CHECK` constraints on copy counts and `reading_progress`; SQLite (CI) relies on validation and tests.
 
 Routes: [`routes/api.php`](routes/api.php); API prefix `/api` is registered in [`bootstrap/app.php`](bootstrap/app.php).
 

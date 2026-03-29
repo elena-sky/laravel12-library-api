@@ -5,10 +5,9 @@ namespace App\Http\Contracts;
 use App\Http\Requests\BookRent\ExtendBookRentRequest;
 use App\Http\Requests\BookRent\FinishBookRentRequest;
 use App\Http\Requests\BookRent\ListBookRentsRequest;
-use App\Http\Requests\BookRent\ShowBookRentReadingProgressRequest;
-use App\Http\Requests\BookRent\ShowBookRentRequest;
 use App\Http\Requests\BookRent\StoreBookRentRequest;
 use App\Http\Requests\BookRent\UpdateBookRentReadingProgressRequest;
+use App\Http\Requests\BookRent\ViewBookRentRequest;
 use App\Models\BookRent;
 use Illuminate\Http\JsonResponse;
 use OpenApi\Attributes as OA;
@@ -88,7 +87,7 @@ interface BookRentControllerInterface
             new OA\Response(response: 404, description: 'Not found'),
         ]
     )]
-    public function show(ShowBookRentRequest $request, BookRent $bookRent): JsonResponse;
+    public function show(ViewBookRentRequest $request, BookRent $bookRent): JsonResponse;
 
     #[OA\Patch(
         path: '/rentals/{bookRent}/extend',
@@ -136,7 +135,7 @@ interface BookRentControllerInterface
             new OA\Response(response: 404, description: 'Not found'),
         ]
     )]
-    public function showReadingProgress(ShowBookRentReadingProgressRequest $request, BookRent $bookRent): JsonResponse;
+    public function showReadingProgress(ViewBookRentRequest $request, BookRent $bookRent): JsonResponse;
 
     #[OA\Patch(
         path: '/rentals/{bookRent}/reading-progress',
@@ -163,7 +162,10 @@ interface BookRentControllerInterface
             new OA\Response(response: 422, description: 'Validation failed'),
         ]
     )]
-    public function updateReadingProgress(UpdateBookRentReadingProgressRequest $request, BookRent $bookRent): JsonResponse;
+    public function updateReadingProgress(
+        UpdateBookRentReadingProgressRequest $request,
+        BookRent $bookRent
+    ): JsonResponse;
 
     #[OA\Post(
         path: '/rentals/{bookRent}/finish',

@@ -5,7 +5,8 @@ namespace App\Exceptions;
 use Throwable;
 
 /**
- * Request is valid but conflicts with current data (duplicates, concurrent state); 409 distinguishes from rule violations.
+ * Request is valid but conflicts with current data (duplicates, concurrent state);
+ * HTTP 409 distinguishes this from validation rule violations.
  */
 class ResourceConflictException extends ApiException
 {

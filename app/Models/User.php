@@ -3,15 +3,26 @@
 namespace App\Models;
 
 use Database\Factories\UserFactory;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Carbon;
 use Laravel\Sanctum\HasApiTokens;
 
 /**
  * Authenticatable identity for the library system (Sanctum personal access tokens).
  *
- * Rentals and reading progress attach when a {@code BookRent} model exists; no relation is declared here yet.
+ * @property int $id
+ * @property string $name
+ * @property string $email
+ * @property Carbon|null $email_verified_at
+ * @property string $password
+ * @property string|null $remember_token
+ * @property Carbon $created_at
+ * @property Carbon $updated_at
+ * @property-read Collection<int, BookRent> $bookRents
  */
 class User extends Authenticatable
 {
@@ -42,5 +53,13 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+
+    /**
+     * @return HasMany<BookRent, $this>
+     */
+    public function bookRents(): HasMany
+    {
+        return $this->hasMany(BookRent::class);
     }
 }

@@ -3,10 +3,11 @@
 namespace App\Http\Requests\User;
 
 use App\Models\User;
-use Illuminate\Contracts\Validation\Validator;
+use Illuminate\Contracts\Validation\Validator as ValidatorContract;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules\Password;
+use Illuminate\Validation\Validator;
 
 class UpdateUserPasswordRequest extends FormRequest
 {
@@ -26,9 +27,9 @@ class UpdateUserPasswordRequest extends FormRequest
         ];
     }
 
-    public function withValidator(Validator $validator): void
+    public function withValidator(ValidatorContract $validator): void
     {
-        $validator->after(function (\Illuminate\Validation\Validator $v): void {
+        $validator->after(function (Validator $v): void {
             $user = $this->user();
             if (! $user instanceof User) {
                 return;

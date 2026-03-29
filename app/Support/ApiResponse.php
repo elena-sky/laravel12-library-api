@@ -92,8 +92,10 @@ final class ApiResponse
      *
      * @param  ResourceCollection|(callable(LengthAwarePaginator): mixed)|null  $transformer
      */
-    public static function paginated(LengthAwarePaginator $paginator, ResourceCollection|callable|null $transformer = null): JsonResponse
-    {
+    public static function paginated(
+        LengthAwarePaginator $paginator,
+        ResourceCollection|callable|null $transformer = null
+    ): JsonResponse {
         if ($transformer instanceof ResourceCollection) {
             $data = $transformer->resolve();
         } elseif (is_callable($transformer)) {
