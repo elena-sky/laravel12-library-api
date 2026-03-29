@@ -2,6 +2,7 @@
 
 namespace Tests\Feature\Api;
 
+use App\Exceptions\ApiException;
 use App\Exceptions\ResourceConflictException;
 use App\Support\ApiResponse;
 use Illuminate\Auth\AuthenticationException;
@@ -64,5 +65,16 @@ class ExceptionResponsesTest extends TestCase
         $this->getJson('/api/v1/_test_auth')
             ->assertUnauthorized()
             ->assertJson(['message' => 'Unauthenticated']);
+    }
+
+    public function test_api_exception_unauthorized_returns_json(): void
+    {
+        Route::middleware('api')->get('/api/v1/_test_api_unauth', function () {
+            throw new ApiException('Invalid credentials', 401);
+        });
+
+        $this->getJson('/api/v1/_test_api_unauth')
+            ->assertUnauthorized()
+            ->assertJson(['message' => 'Invalid credentials']);
     }
 }

@@ -15,11 +15,11 @@ final class RentBookAction
     /**
      * @throws ResourceConflictException
      */
-    public function execute(User $user, Book $book, CarbonInterface $dueDate): BookRent
+    public function execute(User $user, int $bookId, CarbonInterface $dueDate): BookRent
     {
-        return DB::transaction(function () use ($user, $book, $dueDate): BookRent {
+        return DB::transaction(function () use ($user, $bookId, $dueDate): BookRent {
             /** @var Book $locked */
-            $locked = Book::query()->whereKey($book->getKey())->lockForUpdate()->firstOrFail();
+            $locked = Book::query()->whereKey($bookId)->lockForUpdate()->firstOrFail();
 
             if ($locked->available_copies < 1) {
                 throw new ResourceConflictException('Book is not available for rent');

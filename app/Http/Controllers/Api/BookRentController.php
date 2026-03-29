@@ -7,6 +7,7 @@ use App\Actions\BookRent\FinishBookRentAction;
 use App\Actions\BookRent\ListBookRentsAction;
 use App\Actions\BookRent\RentBookAction;
 use App\Actions\BookRent\UpdateReadingProgressAction;
+use App\Exceptions\ResourceConflictException;
 use App\Http\Contracts\BookRentControllerInterface;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\BookRent\ExtendBookRentRequest;
@@ -16,7 +17,6 @@ use App\Http\Requests\BookRent\StoreBookRentRequest;
 use App\Http\Requests\BookRent\UpdateBookRentReadingProgressRequest;
 use App\Http\Requests\BookRent\ViewBookRentRequest;
 use App\Http\Resources\BookRentResource;
-use App\Models\Book;
 use App\Models\BookRent;
 use App\Models\User;
 use App\OpenApi\Schemas\BookRent\ReadingProgressDataResponse;
@@ -50,13 +50,20 @@ class BookRentController extends Controller implements BookRentControllerInterfa
         return ApiResponse::paginated($paginator, BookRentResource::collection($paginator));
     }
 
+    /**
+     * @throws ResourceConflictException
+     */
     public function store(StoreBookRentRequest $request): JsonResponse
     {
         /** @var User $user */
         $user = $request->user();
-        $book = Book::query()->findOrFail($request->validated('book_id'));
+        $data = $request->validated();
 
-        $rent = $this->rentBook->execute($user, $book, $request->dueDate());
+        $rent = $this->rentBook->execute(
+            $user,
+            (int) $data['book_id'],
+            $request->dueDate()
+        );
         $rent->load('book');
 
         return ApiResponse::resource(BookRentResource::make($rent), 'Rental started', 201);
@@ -78,7 +85,8 @@ class BookRentController extends Controller implements BookRentControllerInterfa
     }
 
     /**
-     * Intentionally returns a narrow payload (`reading_progress` only), matching {@see ReadingProgressDataResponse}.
+     * Intentionally returns a narrow payload (`reading_progress` only), matching
+     * {@see ReadingProgressDataResponse}.
      */
     public function showReadingProgress(ViewBookRentRequest $request, BookRent $bookRent): JsonResponse
     {
@@ -87,6 +95,9 @@ class BookRentController extends Controller implements BookRentControllerInterfa
         ]);
     }
 
+    /**
+     * @throws ResourceConflictException
+     */
     public function updateReadingProgress(
         UpdateBookRentReadingProgressRequest $request,
         BookRent $bookRent
@@ -98,6 +109,9 @@ class BookRentController extends Controller implements BookRentControllerInterfa
         return ApiResponse::resource(BookRentResource::make($updated), 'Reading progress updated');
     }
 
+    /**
+     * @throws ResourceConflictException
+     */
     public function finish(FinishBookRentRequest $request, BookRent $bookRent): JsonResponse
     {
         $finished = $this->finishBookRent->execute($bookRent);

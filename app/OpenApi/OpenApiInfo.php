@@ -4,6 +4,7 @@ namespace App\OpenApi;
 
 use App\OpenApi\Schemas\Book\BookDataResponse;
 use App\OpenApi\Schemas\Book\BookResource;
+use App\OpenApi\Schemas\User\LoginRequestBody;
 use OpenApi\Attributes as OA;
 
 /**
@@ -12,6 +13,7 @@ use OpenApi\Attributes as OA;
  *
  * @see BookResource
  * @see BookDataResponse
+ * @see LoginRequestBody
  */
 #[OA\OpenApi(
     openapi: '3.0.0',
