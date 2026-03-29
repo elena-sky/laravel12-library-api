@@ -80,6 +80,39 @@ class UserCrudTest extends TestCase
             ->assertJsonValidationErrors(['per_page']);
     }
 
+    public function test_list_users_per_page_validation_min(): void
+    {
+        $actor = User::factory()->create();
+
+        $this->actingAs($actor, 'sanctum')
+            ->getJson('/api/v1/users?per_page=0')
+            ->assertStatus(422)
+            ->assertJsonValidationErrors(['per_page']);
+    }
+
+    public function test_list_users_respects_per_page(): void
+    {
+        User::factory()->count(5)->create();
+        $actor = User::factory()->create();
+
+        $response = $this->actingAs($actor, 'sanctum')
+            ->getJson('/api/v1/users?per_page=2')
+            ->assertOk();
+
+        $this->assertCount(2, $response->json('data'));
+        $this->assertSame(2, $response->json('meta.per_page'));
+    }
+
+    public function test_show_user_returns_404_for_unknown_id(): void
+    {
+        $actor = User::factory()->create();
+
+        $this->actingAs($actor, 'sanctum')
+            ->getJson('/api/v1/users/999999')
+            ->assertNotFound()
+            ->assertJson(['message' => 'Resource not found']);
+    }
+
     public function test_authenticated_user_can_create_user(): void
     {
         $actor = User::factory()->create();
@@ -125,6 +158,21 @@ class UserCrudTest extends TestCase
             ->assertJsonValidationErrors(['email']);
     }
 
+    public function test_store_user_rejects_password_confirmation_mismatch(): void
+    {
+        $actor = User::factory()->create();
+
+        $this->actingAs($actor, 'sanctum')
+            ->postJson('/api/v1/users', [
+                'name' => 'X',
+                'email' => 'new@example.com',
+                'password' => self::SAFE_PASSWORD,
+                'password_confirmation' => 'other-password',
+            ])
+            ->assertStatus(422)
+            ->assertJsonValidationErrors(['password']);
+    }
+
     public function test_authenticated_user_can_show_another_user(): void
     {
         $actor = User::factory()->create();
@@ -149,6 +197,57 @@ class UserCrudTest extends TestCase
             ->assertJsonPath('message', 'User updated')
             ->assertJsonPath('data.name', 'New Name')
             ->assertJsonPath('data.email', 'target@example.com');
+    }
+
+    public function test_patch_user_with_empty_body_leaves_user_unchanged(): void
+    {
+        $actor = User::factory()->create();
+        $target = User::factory()->create(['name' => 'Stable', 'email' => 'stable@example.com']);
+
+        $this->actingAs($actor, 'sanctum')
+            ->patchJson('/api/v1/users/'.$target->id, [])
+            ->assertOk()
+            ->assertJsonPath('data.name', 'Stable')
+            ->assertJsonPath('data.email', 'stable@example.com');
+    }
+
+    public function test_authenticated_user_can_update_user_name_and_email_together(): void
+    {
+        $actor = User::factory()->create();
+        $target = User::factory()->create(['email' => 'oldmail@example.com']);
+
+        $this->actingAs($actor, 'sanctum')
+            ->patchJson('/api/v1/users/'.$target->id, [
+                'name' => 'Full Update',
+                'email' => 'newmail@example.com',
+            ])
+            ->assertOk()
+            ->assertJsonPath('data.name', 'Full Update')
+            ->assertJsonPath('data.email', 'newmail@example.com');
+
+        $this->assertDatabaseHas('users', [
+            'id' => $target->id,
+            'name' => 'Full Update',
+            'email' => 'newmail@example.com',
+        ]);
+    }
+
+    public function test_update_user_returns_404_for_unknown_id(): void
+    {
+        $actor = User::factory()->create();
+
+        $this->actingAs($actor, 'sanctum')
+            ->patchJson('/api/v1/users/999999', ['name' => 'Nope'])
+            ->assertNotFound();
+    }
+
+    public function test_delete_user_returns_404_for_unknown_id(): void
+    {
+        $actor = User::factory()->create();
+
+        $this->actingAs($actor, 'sanctum')
+            ->deleteJson('/api/v1/users/999999')
+            ->assertNotFound();
     }
 
     public function test_update_user_rejects_duplicate_email(): void
