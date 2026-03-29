@@ -19,6 +19,8 @@ use App\Http\Requests\BookRent\ViewBookRentRequest;
 use App\Http\Resources\BookRentResource;
 use App\Models\BookRent;
 use App\Models\User;
+use App\OpenApi\Schemas\BookRent\ReadingProgressDataResponse;
+use App\Providers\AppServiceProvider;
 use App\Support\ApiResponse;
 use Illuminate\Http\JsonResponse;
 
@@ -26,7 +28,7 @@ use Illuminate\Http\JsonResponse;
  * {@inheritDoc}
  *
  * {@link BookRentControllerInterface} documents scoped `{bookRent}` resolution; see
- * {@see \App\Providers\AppServiceProvider::boot()} for the binding implementation.
+ * {@see AppServiceProvider::boot()} for the binding implementation.
  */
 class BookRentController extends Controller implements BookRentControllerInterface
 {
@@ -84,7 +86,7 @@ class BookRentController extends Controller implements BookRentControllerInterfa
 
     /**
      * Intentionally returns a narrow payload (`reading_progress` only), matching
-     * {@see \App\OpenApi\Schemas\BookRent\ReadingProgressDataResponse}.
+     * {@see ReadingProgressDataResponse}.
      */
     public function showReadingProgress(ViewBookRentRequest $request, BookRent $bookRent): JsonResponse
     {
