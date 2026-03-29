@@ -151,6 +151,47 @@ class BookCatalogTest extends TestCase
         $this->assertSame(['Zebra', 'Aardvark'], $titles);
     }
 
+    public function test_list_books_default_sort_is_title_asc_when_sort_omitted(): void
+    {
+        $user = $this->actingUser();
+        Book::factory()->create(['title' => 'Zebra']);
+        Book::factory()->create(['title' => 'Aardvark']);
+
+        $response = $this->actingAs($user, 'sanctum')
+            ->getJson('/api/v1/books')
+            ->assertOk();
+
+        $titles = collect($response->json('data'))->pluck('title')->all();
+        $this->assertSame(['Aardvark', 'Zebra'], $titles);
+    }
+
+    public function test_list_books_respects_per_page_in_meta(): void
+    {
+        $user = $this->actingUser();
+        Book::factory()->count(4)->create();
+
+        $response = $this->actingAs($user, 'sanctum')
+            ->getJson('/api/v1/books?per_page=2')
+            ->assertOk();
+
+        $response->assertJsonPath('meta.per_page', 2)
+            ->assertJsonPath('meta.total', 4)
+            ->assertJsonPath('meta.last_page', 2);
+
+        $this->assertCount(2, $response->json('data'));
+    }
+
+    public function test_list_books_default_per_page_is_fifteen_in_meta(): void
+    {
+        $user = $this->actingUser();
+        Book::factory()->create();
+
+        $this->actingAs($user, 'sanctum')
+            ->getJson('/api/v1/books')
+            ->assertOk()
+            ->assertJsonPath('meta.per_page', 15);
+    }
+
     public function test_guest_cannot_list_books(): void
     {
         $this->getJson('/api/v1/books')->assertUnauthorized();

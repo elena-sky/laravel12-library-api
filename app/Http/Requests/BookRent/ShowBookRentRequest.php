@@ -1,20 +1,20 @@
 <?php
 
-namespace App\Http\Requests\Book;
+namespace App\Http\Requests\BookRent;
 
-use App\Models\Book;
+use App\Models\BookRent;
 use Illuminate\Foundation\Http\FormRequest;
 
-class DeleteBookRequest extends FormRequest
+class ShowBookRentRequest extends FormRequest
 {
     public function authorize(): bool
     {
-        $book = $this->route('book');
-        if (! $book instanceof Book) {
+        $rent = $this->route('bookRent');
+        if (! $rent instanceof BookRent) {
             return false;
         }
 
-        return $this->user()->can('delete', $book);
+        return $this->user()->can('view', $rent);
     }
 
     /**

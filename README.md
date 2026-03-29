@@ -60,9 +60,7 @@ Backend API (Laravel 12, API-first). Authentication: Laravel Sanctum.
 │   │   │       └── UserController.php
 │   │   ├── Requests/
 │   │   │   ├── Book/
-│   │   │   │   ├── DeleteBookRequest.php
 │   │   │   │   ├── ListBooksRequest.php
-│   │   │   │   ├── ShowBookRequest.php
 │   │   │   │   ├── StoreBookRequest.php
 │   │   │   │   └── UpdateBookRequest.php
 │   │   │   ├── BookRent/
@@ -256,17 +254,19 @@ Self-service on `/api/v1/user` is unchanged: it always reads/updates only the cu
 
 ### Books and rentals (catalog + `book_rents`)
 
-All routes below require `Authorization: Bearer {token}`. Catalog CRUD is available to **any authenticated user** (no admin roles in this iteration).
+All routes below require `Authorization: Bearer {token}`.
+
+**Book catalog authorization (trade-off):** *Book catalog authorization is intentionally relaxed: any Sanctum-authenticated user may CRUD books. This is an **assignment-level trade-off without a roles model** — not how a production library product would enforce access. In production, catalog changes would use roles or permissions.*
 
 **Books:**
 
 | Method | Path | Notes |
 |--------|------|--------|
-| `GET` | `/api/v1/books` | Query: `title`, `author`, `genre` (case-insensitive substring), `available_only`, `sort_by` (`title`,`author`,`genre`,`created_at`,`available_copies`,`total_copies`), `sort_dir`, `per_page` |
+| `GET` | `/api/v1/books` | Query: `title`, `author`, `genre` — **case-insensitive substring** match (`LIKE`), not full-text search. `available_only` (boolean). `sort_by` whitelist: `title`, `author`, `genre`, `created_at`, `available_copies`, `total_copies`; `sort_dir` `asc`/`desc`. **Defaults:** `sort_by=title`, `sort_dir=asc`, `per_page=15` (max 100). |
 | `POST` | `/api/v1/books` | Create; `available_copies` defaults to `total_copies` if omitted |
 | `GET` | `/api/v1/books/{id}` | |
 | `PATCH` | `/api/v1/books/{id}` | |
-| `DELETE` | `/api/v1/books/{id}` | **409** if any **active** rental exists |
+| `DELETE` | `/api/v1/books/{id}` | **409** if any **active** rental exists (business rule in `DeleteBookAction`, not only policy) |
 
 **Rentals** (scoped to the current user; another user’s id yields **404**):
 

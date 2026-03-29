@@ -3,9 +3,7 @@
 namespace App\Http\Contracts;
 
 use App\Actions\Book\ListBooksAction;
-use App\Http\Requests\Book\DeleteBookRequest;
 use App\Http\Requests\Book\ListBooksRequest;
-use App\Http\Requests\Book\ShowBookRequest;
 use App\Http\Requests\Book\StoreBookRequest;
 use App\Http\Requests\Book\UpdateBookRequest;
 use App\Models\Book;
@@ -15,8 +13,9 @@ use OpenApi\Attributes as OA;
 /**
  * Catalog CRUD and listing (authenticated). Filters/sort whitelist match block3 §1.2.
  *
+ * List search uses case-insensitive SQL substring match (LIKE), not full-text search — assignment trade-off.
  * OpenAPI query params: {@see ListBooksAction::SORT_WHITELIST} for `sort_by` enum;
- * `per_page` min/max/default with {@see ListBooksRequest}.
+ * defaults `sort_by=title`, `sort_dir=asc`, `per_page=15` — {@see ListBooksRequest}.
  */
 interface BookControllerInterface
 {
@@ -24,6 +23,7 @@ interface BookControllerInterface
         path: '/books',
         operationId: 'booksIndex',
         summary: 'List and search books',
+        description: 'Filter fields match case-insensitive substrings (SQL LIKE), not full-text search. Default sort: title asc; per_page default 15, max 100.',
         security: [['sanctum' => []]],
         tags: ['Book'],
         parameters: [
@@ -115,7 +115,7 @@ interface BookControllerInterface
             new OA\Response(response: 404, description: 'Not found'),
         ]
     )]
-    public function show(ShowBookRequest $request, Book $book): JsonResponse;
+    public function show(Book $book): JsonResponse;
 
     #[OA\Patch(
         path: '/books/{book}',
@@ -164,5 +164,5 @@ interface BookControllerInterface
             new OA\Response(response: 409, description: 'Active rentals'),
         ]
     )]
-    public function destroy(DeleteBookRequest $request, Book $book): JsonResponse;
+    public function destroy(Book $book): JsonResponse;
 }

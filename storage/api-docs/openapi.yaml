@@ -13,6 +13,7 @@ paths:
       tags:
         - Book
       summary: 'List and search books'
+      description: 'Filter fields match case-insensitive substrings (SQL LIKE), not full-text search. Default sort: title asc; per_page default 15, max 100.'
       operationId: booksIndex
       parameters:
         -
