@@ -5,6 +5,9 @@ namespace App\OpenApi;
 use App\OpenApi\Schemas\Book\BookDataResponse;
 use App\OpenApi\Schemas\Book\BookResource;
 use App\OpenApi\Schemas\User\LoginRequestBody;
+use App\OpenApi\Schemas\User\PaginatedUsersResponse;
+use App\OpenApi\Schemas\User\StoreManagedUserRequestBody;
+use App\OpenApi\Schemas\User\UpdateManagedUserRequestBody;
 use OpenApi\Attributes as OA;
 
 /**
@@ -14,6 +17,9 @@ use OpenApi\Attributes as OA;
  * @see BookResource
  * @see BookDataResponse
  * @see LoginRequestBody
+ * @see PaginatedUsersResponse
+ * @see StoreManagedUserRequestBody
+ * @see UpdateManagedUserRequestBody
  */
 #[OA\OpenApi(
     openapi: '3.0.0',

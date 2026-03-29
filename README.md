@@ -27,6 +27,8 @@ Backend API (Laravel 12, API-first). Authentication: Laravel Sanctum.
 │   │   │   └── UpdateReadingProgressAction.php
 │   │   └── User/
 │   │       ├── CreateUserAction.php
+│   │       ├── DeleteUserAction.php
+│   │       ├── ListUsersAction.php
 │   │       ├── LoginUserAction.php
 │   │       ├── UpdateUserAction.php
 │   │       └── UpdateUserPasswordAction.php
@@ -43,7 +45,8 @@ Backend API (Laravel 12, API-first). Authentication: Laravel Sanctum.
 │   │   │   ├── LoginUserControllerInterface.php
 │   │   │   ├── LogoutUserControllerInterface.php
 │   │   │   ├── RegisterUserControllerInterface.php
-│   │   │   └── StatusControllerInterface.php
+│   │   │   ├── StatusControllerInterface.php
+│   │   │   └── UserControllerInterface.php
 │   │   ├── Controllers/
 │   │   │   ├── Controller.php
 │   │   │   └── Api/
@@ -53,7 +56,8 @@ Backend API (Laravel 12, API-first). Authentication: Laravel Sanctum.
 │   │   │       ├── LoginUserController.php
 │   │   │       ├── LogoutUserController.php
 │   │   │       ├── RegisterUserController.php
-│   │   │       └── StatusController.php
+│   │   │       ├── StatusController.php
+│   │   │       └── UserController.php
 │   │   ├── Requests/
 │   │   │   ├── Book/
 │   │   │   │   ├── DeleteBookRequest.php
@@ -69,8 +73,13 @@ Backend API (Laravel 12, API-first). Authentication: Laravel Sanctum.
 │   │   │   │   ├── UpdateBookRentReadingProgressRequest.php
 │   │   │   │   └── ViewBookRentRequest.php
 │   │   │   └── User/
+│   │   │       ├── DeleteUserRequest.php
+│   │   │       ├── IndexUsersRequest.php
 │   │   │       ├── LoginUserRequest.php
+│   │   │       ├── ShowUserRequest.php
+│   │   │       ├── StoreManagedUserRequest.php
 │   │   │       ├── StoreUserRequest.php
+│   │   │       ├── UpdateManagedUserRequest.php
 │   │   │       ├── UpdateUserPasswordRequest.php
 │   │   │       └── UpdateUserRequest.php
 │   │   └── Resources/
@@ -107,6 +116,9 @@ Backend API (Laravel 12, API-first). Authentication: Laravel Sanctum.
 │   │           ├── RegistrationResponse.php
 │   │           ├── UpdateUserPasswordRequestBody.php
 │   │           ├── UpdateUserProfileRequestBody.php
+│   │           ├── PaginatedUsersResponse.php
+│   │           ├── StoreManagedUserRequestBody.php
+│   │           ├── UpdateManagedUserRequestBody.php
 │   │           ├── UserDataResponse.php
 │   │           └── UserResource.php
 │   ├── Policies/
@@ -227,6 +239,20 @@ Liveness: `GET /api/v1/status/liveness` returns unified JSON (`data`, `message`)
 - `GET /api/v1/user` — current profile; header `Authorization: Bearer {token}`.
 - `PATCH /api/v1/user` — update `name` and `email` (authenticated).
 - `PUT /api/v1/user/password` — change password (`current_password`, `password`, `password_confirmation`).
+
+### Users CRUD (`/users`)
+
+Authenticated routes (`Authorization: Bearer {token}`). **Trade-off:** *This is an explicit assignment-only trade-off to satisfy the CRUD requirement without inventing an RBAC model that is not present in the task. In production, list/create/update/delete on `/users` would be restricted by roles or permissions.*
+
+| Method | Path | Notes |
+|--------|------|--------|
+| `GET` | `/api/v1/users` | Paginated list; query `per_page` (1–100, default 15) |
+| `POST` | `/api/v1/users` | Create user (`name`, `email`, `password`, `password_confirmation`) — same password rules as register |
+| `GET` | `/api/v1/users/{id}` | |
+| `PATCH` | `/api/v1/users/{id}` | Partial update `name` and/or `email` |
+| `DELETE` | `/api/v1/users/{id}` | **409** if target is **yourself** or user has **any** `book_rents` row (DB `RESTRICT` alignment) |
+
+Self-service on `/api/v1/user` is unchanged: it always reads/updates only the current user from the token.
 
 ### Books and rentals (catalog + `book_rents`)
 
