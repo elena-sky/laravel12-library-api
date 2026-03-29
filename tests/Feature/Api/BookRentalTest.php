@@ -58,6 +58,18 @@ class BookRentalTest extends TestCase
         $this->assertSame(0, $book->available_copies);
     }
 
+    public function test_rent_with_nonexistent_book_returns_404(): void
+    {
+        $user = User::factory()->create();
+
+        $this->actingAs($user, 'sanctum')->postJson('/api/v1/rentals', [
+            'book_id' => 99_999,
+            'due_date' => $this->dueSoon(),
+        ])
+            ->assertNotFound()
+            ->assertJson(['message' => 'Resource not found']);
+    }
+
     public function test_user_can_extend_active_rent(): void
     {
         $user = User::factory()->create();

@@ -20,7 +20,7 @@ class StoreBookRentRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'book_id' => ['required', 'integer', 'exists:books,id'],
+            'book_id' => ['required', 'integer'],
             'due_date' => ['required', 'date', 'after:now'],
         ];
     }
