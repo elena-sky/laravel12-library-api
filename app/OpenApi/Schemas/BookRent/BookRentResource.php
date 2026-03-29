@@ -6,7 +6,10 @@ use OpenApi\Attributes as OA;
 
 #[OA\Schema(
     schema: 'BookRentResource',
-    required: ['id', 'book_id', 'status', 'rented_at', 'due_date', 'reading_progress', 'extended_count', 'created_at', 'updated_at'],
+    required: [
+        'id', 'book_id', 'status', 'rented_at', 'due_date', 'reading_progress',
+        'extended_count', 'created_at', 'updated_at',
+    ],
     properties: [
         new OA\Property(property: 'id', type: 'integer', example: 1),
         new OA\Property(property: 'book_id', type: 'integer'),
