@@ -11,6 +11,7 @@ use App\Http\Contracts\LoginUserControllerInterface;
 use App\Http\Contracts\LogoutUserControllerInterface;
 use App\Http\Contracts\RegisterUserControllerInterface;
 use App\Http\Contracts\StatusControllerInterface;
+use App\Http\Contracts\UserControllerInterface;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/status/liveness', [StatusControllerInterface::class, 'liveness']);
@@ -27,6 +28,8 @@ Route::middleware('auth:sanctum')->group(function (): void {
         Route::patch('/', [CurrentUserControllerInterface::class, 'update']);
         Route::put('/password', [CurrentUserControllerInterface::class, 'updatePassword']);
     });
+
+    Route::apiResource('users', UserControllerInterface::class);
 
     Route::apiResource('books', BookControllerInterface::class);
 

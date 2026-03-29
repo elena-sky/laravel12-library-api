@@ -9,6 +9,7 @@ use App\Http\Contracts\LoginUserControllerInterface;
 use App\Http\Contracts\LogoutUserControllerInterface;
 use App\Http\Contracts\RegisterUserControllerInterface;
 use App\Http\Contracts\StatusControllerInterface;
+use App\Http\Contracts\UserControllerInterface;
 use App\Http\Controllers\Api\BookController;
 use App\Http\Controllers\Api\BookRentController;
 use App\Http\Controllers\Api\CurrentUserController;
@@ -16,6 +17,7 @@ use App\Http\Controllers\Api\LoginUserController;
 use App\Http\Controllers\Api\LogoutUserController;
 use App\Http\Controllers\Api\RegisterUserController;
 use App\Http\Controllers\Api\StatusController;
+use App\Http\Controllers\Api\UserController;
 use App\Models\BookRent;
 use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
@@ -40,6 +42,7 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(LoginUserControllerInterface::class, LoginUserController::class);
         $this->app->bind(LogoutUserControllerInterface::class, LogoutUserController::class);
         $this->app->bind(CurrentUserControllerInterface::class, CurrentUserController::class);
+        $this->app->bind(UserControllerInterface::class, UserController::class);
         $this->app->bind(BookControllerInterface::class, BookController::class);
         $this->app->bind(BookRentControllerInterface::class, BookRentController::class);
     }
