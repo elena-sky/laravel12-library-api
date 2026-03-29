@@ -38,6 +38,14 @@ class UserAccountTest extends TestCase
         $response->assertJsonMissingPath('data.password');
     }
 
+    public function test_registration_validation_requires_core_fields(): void
+    {
+        $this->postJson('/api/v1/register', [])
+            ->assertStatus(422)
+            ->assertJsonPath('message', 'Validation failed')
+            ->assertJsonValidationErrors(['name', 'email', 'password']);
+    }
+
     public function test_registration_rejects_duplicate_email(): void
     {
         User::factory()->create(['email' => 'dup@example.com']);
@@ -82,6 +90,22 @@ class UserAccountTest extends TestCase
         $this->getJson('/api/v1/user')
             ->assertUnauthorized()
             ->assertJson(['message' => 'Unauthenticated']);
+    }
+
+    public function test_guest_cannot_update_profile(): void
+    {
+        $this->patchJson('/api/v1/user', ['name' => 'X'])
+            ->assertUnauthorized();
+    }
+
+    public function test_guest_cannot_update_password(): void
+    {
+        $this->putJson('/api/v1/user/password', [
+            'current_password' => 'a',
+            'password' => self::SAFE_PASSWORD,
+            'password_confirmation' => self::SAFE_PASSWORD,
+        ])
+            ->assertUnauthorized();
     }
 
     public function test_user_can_update_own_profile(): void

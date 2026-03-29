@@ -173,6 +173,22 @@ class BookCatalogTest extends TestCase
         $this->getJson('/api/v1/books/'.$book->id)->assertUnauthorized();
     }
 
+    public function test_guest_cannot_update_book(): void
+    {
+        $book = Book::factory()->create();
+
+        $this->patchJson('/api/v1/books/'.$book->id, ['title' => 'X'])
+            ->assertUnauthorized();
+    }
+
+    public function test_guest_cannot_delete_book(): void
+    {
+        $book = Book::factory()->create();
+
+        $this->deleteJson('/api/v1/books/'.$book->id)
+            ->assertUnauthorized();
+    }
+
     public function test_authenticated_user_can_show_book(): void
     {
         $user = $this->actingUser();
@@ -209,6 +225,61 @@ class BookCatalogTest extends TestCase
             ->getJson('/api/v1/books?sort_by=not_a_real_column')
             ->assertUnprocessable()
             ->assertJsonValidationErrors(['sort_by']);
+    }
+
+    public function test_list_books_rejects_invalid_sort_dir(): void
+    {
+        $user = $this->actingUser();
+
+        $this->actingAs($user, 'sanctum')
+            ->getJson('/api/v1/books?sort_dir=invalid')
+            ->assertUnprocessable()
+            ->assertJsonValidationErrors(['sort_dir']);
+    }
+
+    public function test_list_books_rejects_per_page_out_of_range(): void
+    {
+        $user = $this->actingUser();
+
+        $this->actingAs($user, 'sanctum')
+            ->getJson('/api/v1/books?per_page=0')
+            ->assertUnprocessable()
+            ->assertJsonValidationErrors(['per_page']);
+
+        $this->actingAs($user, 'sanctum')
+            ->getJson('/api/v1/books?per_page=101')
+            ->assertUnprocessable()
+            ->assertJsonValidationErrors(['per_page']);
+    }
+
+    public function test_show_book_returns_404_for_unknown_id(): void
+    {
+        $user = $this->actingUser();
+
+        $this->actingAs($user, 'sanctum')
+            ->getJson('/api/v1/books/999999')
+            ->assertNotFound()
+            ->assertJson(['message' => 'Resource not found']);
+    }
+
+    public function test_update_book_returns_404_for_unknown_id(): void
+    {
+        $user = $this->actingUser();
+
+        $this->actingAs($user, 'sanctum')
+            ->patchJson('/api/v1/books/999999', ['title' => 'Nope'])
+            ->assertNotFound()
+            ->assertJson(['message' => 'Resource not found']);
+    }
+
+    public function test_delete_book_returns_404_for_unknown_id(): void
+    {
+        $user = $this->actingUser();
+
+        $this->actingAs($user, 'sanctum')
+            ->deleteJson('/api/v1/books/999999')
+            ->assertNotFound()
+            ->assertJson(['message' => 'Resource not found']);
     }
 
     public function test_update_rejects_available_copies_above_total(): void

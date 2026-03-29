@@ -70,6 +70,30 @@ class BookRentalTest extends TestCase
             ->assertJson(['message' => 'Resource not found']);
     }
 
+    public function test_create_rental_requires_book_id_and_due_date(): void
+    {
+        $user = User::factory()->create();
+
+        $this->actingAs($user, 'sanctum')
+            ->postJson('/api/v1/rentals', [])
+            ->assertUnprocessable()
+            ->assertJsonValidationErrors(['book_id', 'due_date']);
+    }
+
+    public function test_create_rental_rejects_due_date_in_past(): void
+    {
+        $user = User::factory()->create();
+        $book = Book::factory()->create(['available_copies' => 1, 'total_copies' => 1]);
+
+        $this->actingAs($user, 'sanctum')
+            ->postJson('/api/v1/rentals', [
+                'book_id' => $book->id,
+                'due_date' => Carbon::now()->subDay()->toIso8601String(),
+            ])
+            ->assertUnprocessable()
+            ->assertJsonValidationErrors(['due_date']);
+    }
+
     public function test_user_can_extend_active_rent(): void
     {
         $user = User::factory()->create();
@@ -102,6 +126,22 @@ class BookRentalTest extends TestCase
             ->patchJson('/api/v1/rentals/'.$rent->id.'/extend', ['due_date' => $newDue])
             ->assertStatus(409)
             ->assertJsonPath('message', 'Cannot extend a finished rental');
+    }
+
+    public function test_extend_rejects_due_date_in_past(): void
+    {
+        $user = User::factory()->create();
+        $book = Book::factory()->create(['available_copies' => 0, 'total_copies' => 1]);
+        $rent = BookRent::factory()->for($user)->for($book)->create([
+            'status' => BookRentStatus::Active,
+        ]);
+
+        $this->actingAs($user, 'sanctum')
+            ->patchJson('/api/v1/rentals/'.$rent->id.'/extend', [
+                'due_date' => Carbon::now()->subHour()->toIso8601String(),
+            ])
+            ->assertUnprocessable()
+            ->assertJsonValidationErrors(['due_date']);
     }
 
     public function test_user_can_update_reading_progress(): void
@@ -192,6 +232,34 @@ class BookRentalTest extends TestCase
             ->assertNotFound();
     }
 
+    public function test_cannot_extend_finish_or_touch_reading_progress_on_another_users_rent(): void
+    {
+        $owner = User::factory()->create();
+        $other = User::factory()->create();
+        $book = Book::factory()->create(['available_copies' => 0, 'total_copies' => 1]);
+        $rent = BookRent::factory()->for($owner)->for($book)->create(['status' => BookRentStatus::Active]);
+        $due = $this->dueSoon();
+
+        $cases = [
+            ['PATCH', '/api/v1/rentals/'.$rent->id.'/extend', ['due_date' => $due]],
+            ['GET', '/api/v1/rentals/'.$rent->id.'/reading-progress', []],
+            ['PATCH', '/api/v1/rentals/'.$rent->id.'/reading-progress', ['reading_progress' => 10]],
+            ['POST', '/api/v1/rentals/'.$rent->id.'/finish', []],
+        ];
+
+        foreach ($cases as [$method, $uri, $payload]) {
+            $response = match ($method) {
+                'GET' => $this->actingAs($other, 'sanctum')->getJson($uri),
+                'POST' => $this->actingAs($other, 'sanctum')->postJson($uri, $payload),
+                'PATCH' => $this->actingAs($other, 'sanctum')->patchJson($uri, $payload),
+                default => throw new \InvalidArgumentException('Unsupported method: '.$method),
+            };
+
+            $response->assertNotFound()
+                ->assertJson(['message' => 'Resource not found']);
+        }
+    }
+
     public function test_reading_progress_endpoint_returns_value(): void
     {
         $user = User::factory()->create();
@@ -267,6 +335,21 @@ class BookRentalTest extends TestCase
 
         $second->assertJsonPath('meta.current_page', 2)
             ->assertJsonCount(1, 'data');
+    }
+
+    public function test_list_rentals_rejects_per_page_out_of_range(): void
+    {
+        $user = User::factory()->create();
+
+        $this->actingAs($user, 'sanctum')
+            ->getJson('/api/v1/rentals?per_page=0')
+            ->assertUnprocessable()
+            ->assertJsonValidationErrors(['per_page']);
+
+        $this->actingAs($user, 'sanctum')
+            ->getJson('/api/v1/rentals?per_page=101')
+            ->assertUnprocessable()
+            ->assertJsonValidationErrors(['per_page']);
     }
 
     public function test_user_can_show_own_rental_with_nested_book(): void
