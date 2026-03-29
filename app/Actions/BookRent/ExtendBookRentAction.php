@@ -9,8 +9,6 @@ use Illuminate\Support\Facades\DB;
 
 final class ExtendBookRentAction
 {
-    /**
-     */
     public function execute(BookRent $rent, CarbonInterface $newDueDate): BookRent
     {
         return DB::transaction(static function () use ($rent, $newDueDate): BookRent {
