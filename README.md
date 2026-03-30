@@ -272,7 +272,7 @@ All routes below require `Authorization: Bearer {token}`.
 
 | Method | Path | Notes |
 |--------|------|--------|
-| `GET` | `/api/v1/rentals` | Paginated list |
+| `GET` | `/api/v1/rentals` | Paginated list; **defaults:** `per_page=15` (max 100) |
 | `POST` | `/api/v1/rentals` | Body: `book_id`, `due_date` (must be after now); **409** if no copies |
 | `GET` | `/api/v1/rentals/{id}` | |
 | `PATCH` | `/api/v1/rentals/{id}/extend` | `due_date`; **409** if not `active` |

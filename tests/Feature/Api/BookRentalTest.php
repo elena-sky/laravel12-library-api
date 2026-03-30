@@ -337,6 +337,16 @@ class BookRentalTest extends TestCase
             ->assertJsonCount(1, 'data');
     }
 
+    public function test_list_rentals_default_per_page_is_fifteen_in_meta(): void
+    {
+        $user = User::factory()->create();
+
+        $this->actingAs($user, 'sanctum')
+            ->getJson('/api/v1/rentals')
+            ->assertOk()
+            ->assertJsonPath('meta.per_page', 15);
+    }
+
     public function test_list_rentals_rejects_per_page_out_of_range(): void
     {
         $user = User::factory()->create();
