@@ -45,4 +45,49 @@ interface StatusControllerInterface
         ]
     )]
     public function liveness(): JsonResponse;
+
+    /**
+     * Readiness: application can serve traffic (database reachable).
+     */
+    #[OA\Get(
+        path: '/status/readiness',
+        operationId: 'statusReadiness',
+        summary: 'Readiness probe',
+        description: 'Returns 200 when the database connection succeeds; 503 when the database is unavailable.',
+        tags: ['Status'],
+        responses: [
+            new OA\Response(
+                response: 200,
+                description: 'Database is reachable',
+                content: new OA\JsonContent(
+                    type: 'object',
+                    required: ['data', 'message'],
+                    properties: [
+                        new OA\Property(
+                            property: 'data',
+                            type: 'object',
+                            required: ['status', 'database'],
+                            properties: [
+                                new OA\Property(property: 'status', type: 'string', example: 'ok'),
+                                new OA\Property(property: 'database', type: 'string', example: 'ok'),
+                            ]
+                        ),
+                        new OA\Property(property: 'message', type: 'string', example: 'Readiness check passed'),
+                    ]
+                )
+            ),
+            new OA\Response(
+                response: 503,
+                description: 'Database unavailable',
+                content: new OA\JsonContent(
+                    type: 'object',
+                    required: ['message'],
+                    properties: [
+                        new OA\Property(property: 'message', type: 'string', example: 'Readiness check failed: database unavailable'),
+                    ]
+                )
+            ),
+        ]
+    )]
+    public function readiness(): JsonResponse;
 }
