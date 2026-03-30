@@ -25,6 +25,7 @@ class ListBooksActionTest extends TestCase
             'sort_by' => 'title',
             'sort_dir' => 'asc',
             'per_page' => 15,
+            'page' => 1,
         ], $overrides);
     }
 
@@ -33,7 +34,7 @@ class ListBooksActionTest extends TestCase
         Book::factory()->create(['title' => 'Alpha UniqueToken']);
         Book::factory()->create(['title' => 'Beta']);
 
-        $paginator = (new ListBooksAction)->execute($this->baseFilters([
+        $paginator = $this->app->make(ListBooksAction::class)->execute($this->baseFilters([
             'title' => 'uniquetoken',
         ]));
 
@@ -46,7 +47,7 @@ class ListBooksActionTest extends TestCase
         Book::factory()->create(['title' => 'In Stock', 'available_copies' => 1, 'total_copies' => 1]);
         Book::factory()->unavailable()->create(['title' => 'Gone']);
 
-        $paginator = (new ListBooksAction)->execute($this->baseFilters([
+        $paginator = $this->app->make(ListBooksAction::class)->execute($this->baseFilters([
             'available_only' => true,
         ]));
 
@@ -60,7 +61,7 @@ class ListBooksActionTest extends TestCase
         Book::factory()->create(['title' => 'Aardvark']);
         Book::factory()->create(['title' => 'Zebra']);
 
-        $paginator = (new ListBooksAction)->execute($this->baseFilters([
+        $paginator = $this->app->make(ListBooksAction::class)->execute($this->baseFilters([
             'sort_by' => 'title',
             'sort_dir' => 'desc',
         ]));
@@ -72,7 +73,7 @@ class ListBooksActionTest extends TestCase
     {
         Book::factory()->count(4)->create();
 
-        $paginator = (new ListBooksAction)->execute($this->baseFilters([
+        $paginator = $this->app->make(ListBooksAction::class)->execute($this->baseFilters([
             'per_page' => 2,
         ]));
 

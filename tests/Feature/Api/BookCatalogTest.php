@@ -293,6 +293,66 @@ class BookCatalogTest extends TestCase
             ->assertJsonValidationErrors(['per_page']);
     }
 
+    public function test_list_books_rejects_invalid_page(): void
+    {
+        $user = $this->actingUser();
+
+        $this->actingAs($user, 'sanctum')
+            ->getJson('/api/v1/books?page=0')
+            ->assertUnprocessable()
+            ->assertJsonValidationErrors(['page']);
+    }
+
+    public function test_list_books_identical_requests_return_same_payload(): void
+    {
+        $user = $this->actingUser();
+        Book::factory()->create(['title' => 'CacheListOne']);
+        $url = '/api/v1/books?sort_by=title&sort_dir=asc&per_page=15';
+
+        $first = $this->actingAs($user, 'sanctum')->getJson($url)->assertOk();
+        $second = $this->actingAs($user, 'sanctum')->getJson($url)->assertOk();
+
+        $this->assertEquals($first->json(), $second->json());
+    }
+
+    public function test_list_books_equivalent_title_filter_returns_same_payload(): void
+    {
+        $user = $this->actingUser();
+        Book::factory()->create(['title' => 'UniqueCacheTitle']);
+
+        $a = $this->actingAs($user, 'sanctum')
+            ->getJson('/api/v1/books?title='.rawurlencode('UniqueCacheTitle'))
+            ->assertOk();
+        $b = $this->actingAs($user, 'sanctum')
+            ->getJson('/api/v1/books?title='.rawurlencode('  uniquecachetitle  '))
+            ->assertOk();
+
+        $this->assertEquals($a->json(), $b->json());
+    }
+
+    public function test_list_books_includes_new_book_after_create_busts_cache(): void
+    {
+        $user = $this->actingUser();
+        Book::factory()->create(['title' => 'Zebra Existing']);
+
+        $listUrl = '/api/v1/books?sort_by=title&sort_dir=asc&per_page=15';
+        $before = $this->actingAs($user, 'sanctum')->getJson($listUrl)->assertOk();
+        $this->assertCount(1, $before->json('data'));
+
+        $this->actingAs($user, 'sanctum')->postJson('/api/v1/books', [
+            'title' => 'Aardvark New',
+            'author' => 'A',
+            'genre' => 'G',
+            'total_copies' => 1,
+            'available_copies' => 1,
+        ])->assertCreated();
+
+        $after = $this->actingAs($user, 'sanctum')->getJson($listUrl)->assertOk();
+        $this->assertCount(2, $after->json('data'));
+        $titles = collect($after->json('data'))->pluck('title')->all();
+        $this->assertContains('Aardvark New', $titles);
+    }
+
     public function test_show_book_returns_404_for_unknown_id(): void
     {
         $user = $this->actingUser();
