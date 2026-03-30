@@ -13,9 +13,9 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\BookRent\ExtendBookRentRequest;
 use App\Http\Requests\BookRent\FinishBookRentRequest;
 use App\Http\Requests\BookRent\ListBookRentsRequest;
+use App\Http\Requests\BookRent\ShowBookRentRequest;
 use App\Http\Requests\BookRent\StoreBookRentRequest;
 use App\Http\Requests\BookRent\UpdateBookRentReadingProgressRequest;
-use App\Http\Requests\BookRent\ViewBookRentRequest;
 use App\Http\Resources\BookRentResource;
 use App\Models\BookRent;
 use App\Models\User;
@@ -69,7 +69,7 @@ class BookRentController extends Controller implements BookRentControllerInterfa
         return ApiResponse::resource(BookRentResource::make($rent), 'Rental started', 201);
     }
 
-    public function show(ViewBookRentRequest $request, BookRent $bookRent): JsonResponse
+    public function show(ShowBookRentRequest $request, BookRent $bookRent): JsonResponse
     {
         $bookRent->load('book');
 
@@ -88,7 +88,7 @@ class BookRentController extends Controller implements BookRentControllerInterfa
      * Intentionally returns a narrow payload (`reading_progress` only), matching
      * {@see ReadingProgressDataResponse}.
      */
-    public function showReadingProgress(ViewBookRentRequest $request, BookRent $bookRent): JsonResponse
+    public function showReadingProgress(ShowBookRentRequest $request, BookRent $bookRent): JsonResponse
     {
         return ApiResponse::success([
             'reading_progress' => $bookRent->reading_progress,

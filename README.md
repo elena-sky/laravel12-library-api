@@ -60,16 +60,18 @@ Backend API (Laravel 12, API-first). Authentication: Laravel Sanctum.
 │   │   │       └── UserController.php
 │   │   ├── Requests/
 │   │   │   ├── Book/
+│   │   │   │   ├── DeleteBookRequest.php
 │   │   │   │   ├── ListBooksRequest.php
+│   │   │   │   ├── ShowBookRequest.php
 │   │   │   │   ├── StoreBookRequest.php
 │   │   │   │   └── UpdateBookRequest.php
 │   │   │   ├── BookRent/
 │   │   │   │   ├── ExtendBookRentRequest.php
 │   │   │   │   ├── FinishBookRentRequest.php
 │   │   │   │   ├── ListBookRentsRequest.php
+│   │   │   │   ├── ShowBookRentRequest.php
 │   │   │   │   ├── StoreBookRentRequest.php
-│   │   │   │   ├── UpdateBookRentReadingProgressRequest.php
-│   │   │   │   └── ViewBookRentRequest.php
+│   │   │   │   └── UpdateBookRentReadingProgressRequest.php
 │   │   │   └── User/
 │   │   │       ├── DeleteUserRequest.php
 │   │   │       ├── IndexUsersRequest.php
@@ -147,6 +149,22 @@ Backend API (Laravel 12, API-first). Authentication: Laravel Sanctum.
     ├── Unit/
     └── TestCase.php
 ```
+
+Дерево соответствует фактической структуре `app/`. Доменные операции сосредоточены в **`Actions/`**; отдельные каталоги `DTOs/` и `Services/` не используются.
+
+## Architecture and trade-offs
+
+- **Интерфейсы контроллеров** — атрибуты OpenAPI стоят на контрактах в `app/Http/Contracts/`; реализации в `app/Http/Controllers/Api/` регистрируются в `AppServiceProvider`. Так документация привязана к публичной поверхности API.
+- **Привязка `{bookRent}`** — в маршруте разрешается только аренда текущего пользователя; чужой или несуществующий id даёт **404** (без перечисления ресурсов). См. `AppServiceProvider::registerBookRentRouteBinding()`.
+- **Формат JSON** — ответы и ошибки унифицированы через `App\Support\ApiResponse` и глобальный рендер исключений для `api/*` в `bootstrap/app.php`. Удаление сущностей и logout — **200** с полем `message`, не пустой **204**.
+- **Form Requests** — для `show` / `destroy` у книг и пользователей используются отдельные классы запросов; авторизация совпадает с `Policy`.
+
+### Возможные улучшения (вторая итерация)
+
+- Лимит числа продлений аренды, отдельные rate limits для тяжёлых list-эндпоинтов, коллекция **curl/Postman** под ручные проверки.
+- Роли и права (RBAC), если появятся в требованиях; сейчас каталог книг доступен любому аутентифицированному пользователю по scope задания.
+
+**Рефакторинг:** при отказе от OpenAPI на интерфейсах можно перенести атрибуты на классы контроллеров и упростить `routes/api.php` + `AppServiceProvider` — это осознанный обмен «меньше инфраструктуры» vs «контракт рядом с публичным API».
 
 ## Requirements
 
@@ -272,7 +290,7 @@ All routes below require `Authorization: Bearer {token}`.
 
 | Method | Path | Notes |
 |--------|------|--------|
-| `GET` | `/api/v1/rentals` | Paginated list |
+| `GET` | `/api/v1/rentals` | Paginated list; **defaults:** `per_page=15` (max 100) |
 | `POST` | `/api/v1/rentals` | Body: `book_id`, `due_date` (must be after now); **409** if no copies |
 | `GET` | `/api/v1/rentals/{id}` | |
 | `PATCH` | `/api/v1/rentals/{id}/extend` | `due_date`; **409** if not `active` |

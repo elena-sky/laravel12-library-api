@@ -1,20 +1,20 @@
 <?php
 
-namespace App\Http\Requests\BookRent;
+namespace App\Http\Requests\Book;
 
-use App\Models\BookRent;
+use App\Models\Book;
 use Illuminate\Foundation\Http\FormRequest;
 
-class ViewBookRentRequest extends FormRequest
+class ShowBookRequest extends FormRequest
 {
     public function authorize(): bool
     {
-        $rent = $this->route('bookRent');
-        if (! $rent instanceof BookRent) {
+        $book = $this->route('book');
+        if (! $book instanceof Book) {
             return false;
         }
 
-        return $this->user()->can('view', $rent);
+        return $this->user()->can('view', $book);
     }
 
     /**

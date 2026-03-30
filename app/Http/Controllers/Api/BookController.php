@@ -8,7 +8,9 @@ use App\Actions\Book\ListBooksAction;
 use App\Actions\Book\UpdateBookAction;
 use App\Http\Contracts\BookControllerInterface;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Book\DeleteBookRequest;
 use App\Http\Requests\Book\ListBooksRequest;
+use App\Http\Requests\Book\ShowBookRequest;
 use App\Http\Requests\Book\StoreBookRequest;
 use App\Http\Requests\Book\UpdateBookRequest;
 use App\Http\Resources\BookResource;
@@ -42,10 +44,8 @@ class BookController extends Controller implements BookControllerInterface
         return ApiResponse::resource(BookResource::make($book), 'Book created', 201);
     }
 
-    public function show(Book $book): JsonResponse
+    public function show(ShowBookRequest $request, Book $book): JsonResponse
     {
-        $this->authorize('view', $book);
-
         return ApiResponse::resource(BookResource::make($book));
     }
 
@@ -56,10 +56,8 @@ class BookController extends Controller implements BookControllerInterface
         return ApiResponse::resource(BookResource::make($updated), 'Book updated');
     }
 
-    public function destroy(Book $book): JsonResponse
+    public function destroy(DeleteBookRequest $request, Book $book): JsonResponse
     {
-        $this->authorize('delete', $book);
-
         $this->deleteBook->execute($book);
 
         return ApiResponse::success(null, 'Book deleted');
