@@ -5,7 +5,7 @@
             "description": "",
             "item": [
                 {
-                    "id": "073abe4d-3f0b-40ec-8eb0-370e4fcde3e6",
+                    "id": "8ce8b5ec-450e-48b4-96c7-03d562d55383",
                     "name": "List and search books",
                     "request": {
                         "name": "List and search books",
@@ -83,6 +83,15 @@
                                     },
                                     "key": "per_page",
                                     "value": "15"
+                                },
+                                {
+                                    "disabled": false,
+                                    "description": {
+                                        "content": "",
+                                        "type": "text/plain"
+                                    },
+                                    "key": "page",
+                                    "value": "1"
                                 }
                             ],
                             "variable": []
@@ -107,7 +116,7 @@
                     },
                     "response": [
                         {
-                            "id": "bb528d71-41bd-49e3-b846-afd277247faf",
+                            "id": "3b97be60-e18c-460d-bac0-0767d7e0b9fc",
                             "name": "Paginated books",
                             "originalRequest": {
                                 "url": {
@@ -180,6 +189,15 @@
                                             },
                                             "key": "per_page",
                                             "value": "15"
+                                        },
+                                        {
+                                            "disabled": false,
+                                            "description": {
+                                                "content": "",
+                                                "type": "text/plain"
+                                            },
+                                            "key": "page",
+                                            "value": "1"
                                         }
                                     ],
                                     "variable": []
@@ -214,7 +232,7 @@
                             "_postman_previewlanguage": "json"
                         },
                         {
-                            "id": "f2536732-871c-4f6a-8b92-8b9e41a68f61",
+                            "id": "1d615848-4849-4894-a6c4-ee70ab330643",
                             "name": "Unauthenticated",
                             "originalRequest": {
                                 "url": {
@@ -287,6 +305,15 @@
                                             },
                                             "key": "per_page",
                                             "value": "15"
+                                        },
+                                        {
+                                            "disabled": false,
+                                            "description": {
+                                                "content": "",
+                                                "type": "text/plain"
+                                            },
+                                            "key": "page",
+                                            "value": "1"
                                         }
                                     ],
                                     "variable": []
@@ -311,7 +338,7 @@
                             "_postman_previewlanguage": "text"
                         },
                         {
-                            "id": "2c66f5fb-2b74-4320-9c7a-33c1c29c8e92",
+                            "id": "9ffadb5d-5579-4971-aae1-ae9a9b9f2979",
                             "name": "Validation failed",
                             "originalRequest": {
                                 "url": {
@@ -384,6 +411,15 @@
                                             },
                                             "key": "per_page",
                                             "value": "15"
+                                        },
+                                        {
+                                            "disabled": false,
+                                            "description": {
+                                                "content": "",
+                                                "type": "text/plain"
+                                            },
+                                            "key": "page",
+                                            "value": "1"
                                         }
                                     ],
                                     "variable": []
@@ -414,7 +450,7 @@
                     }
                 },
                 {
-                    "id": "1e2449a0-fa53-4f0e-81f6-8917f0a7cdef",
+                    "id": "6613f589-5fee-456b-a979-ce648b69ab4f",
                     "name": "Create book",
                     "request": {
                         "name": "Create book",
@@ -462,7 +498,7 @@
                     },
                     "response": [
                         {
-                            "id": "d70abf53-9866-4a0e-b75f-4b946b4215bd",
+                            "id": "6f5daac9-fe38-4e6d-b772-7b28050f1a03",
                             "name": "Created",
                             "originalRequest": {
                                 "url": {
@@ -518,7 +554,7 @@
                             "_postman_previewlanguage": "json"
                         },
                         {
-                            "id": "b5ba6b41-094a-4fa9-8b5e-f44085868936",
+                            "id": "e8e9a00c-b4a2-4411-8451-ecb4a0817a6d",
                             "name": "Unauthenticated",
                             "originalRequest": {
                                 "url": {
@@ -564,7 +600,7 @@
                             "_postman_previewlanguage": "text"
                         },
                         {
-                            "id": "d456fce5-213f-4531-8f29-5b71c7484d16",
+                            "id": "55bcb7b2-4d0f-46a9-b790-621b880adc83",
                             "name": "Validation failed",
                             "originalRequest": {
                                 "url": {
@@ -620,7 +656,7 @@
                     "description": "",
                     "item": [
                         {
-                            "id": "9cc41fcb-177e-4fbe-b314-068f6f73582c",
+                            "id": "dbf06947-450c-4288-b555-6598d83bed34",
                             "name": "Get book by id",
                             "request": {
                                 "name": "Get book by id",
@@ -667,7 +703,7 @@
                             },
                             "response": [
                                 {
-                                    "id": "9038454e-bf4b-4012-9aea-c2176a0d7437",
+                                    "id": "7f6f17e7-02ef-4020-a5f6-3897b0e084ea",
                                     "name": "Book",
                                     "originalRequest": {
                                         "url": {
@@ -722,7 +758,7 @@
                                     "_postman_previewlanguage": "json"
                                 },
                                 {
-                                    "id": "08617272-3b08-443c-84eb-ac68d555580f",
+                                    "id": "2a2cdea4-8a1f-4f3f-8d60-838dc9f9ca40",
                                     "name": "Unauthenticated",
                                     "originalRequest": {
                                         "url": {
@@ -767,7 +803,7 @@
                                     "_postman_previewlanguage": "text"
                                 },
                                 {
-                                    "id": "f1bb93b1-bfa7-4a87-9cd0-628994216122",
+                                    "id": "0581dcd8-b730-420b-b7d4-3afa7626b26d",
                                     "name": "Not found",
                                     "originalRequest": {
                                         "url": {
@@ -818,7 +854,7 @@
                             }
                         },
                         {
-                            "id": "a5bfc3c9-6e35-44a1-b691-5193bbb6bc65",
+                            "id": "abbbb9b3-bea8-41d2-9b54-fa9c027bbbf4",
                             "name": "Delete book (forbidden if active rentals exist)",
                             "request": {
                                 "name": "Delete book (forbidden if active rentals exist)",
@@ -865,7 +901,7 @@
                             },
                             "response": [
                                 {
-                                    "id": "34caa2dd-82e7-4159-ad8a-701ec982aed3",
+                                    "id": "1fd01626-ea32-4aa9-b57d-6b119d3c680e",
                                     "name": "Deleted",
                                     "originalRequest": {
                                         "url": {
@@ -920,7 +956,7 @@
                                     "_postman_previewlanguage": "json"
                                 },
                                 {
-                                    "id": "ed4258e3-bbe2-4d25-b596-f63a19579f4c",
+                                    "id": "026d52c8-9f7e-4148-bd12-10144906132d",
                                     "name": "Unauthenticated",
                                     "originalRequest": {
                                         "url": {
@@ -965,7 +1001,7 @@
                                     "_postman_previewlanguage": "text"
                                 },
                                 {
-                                    "id": "30b11073-a213-4b0d-9649-fe514c817b96",
+                                    "id": "d0bf13d9-4a3f-4a56-b099-57fc7a48075c",
                                     "name": "Not found",
                                     "originalRequest": {
                                         "url": {
@@ -1010,7 +1046,7 @@
                                     "_postman_previewlanguage": "text"
                                 },
                                 {
-                                    "id": "66fa6fb5-ae4a-441d-8f56-fe72691502ef",
+                                    "id": "5adc4578-2a4f-4389-8979-2d91260d5e0e",
                                     "name": "Active rentals",
                                     "originalRequest": {
                                         "url": {
@@ -1061,7 +1097,7 @@
                             }
                         },
                         {
-                            "id": "71a758c9-9af7-4a90-aed1-ef7b8e6ce2a4",
+                            "id": "dacb2ab7-c9f9-4498-8d6a-5d8f8f274774",
                             "name": "Update book",
                             "request": {
                                 "name": "Update book",
@@ -1121,7 +1157,7 @@
                             },
                             "response": [
                                 {
-                                    "id": "bd68110f-3cb3-4484-999b-469785c52e8e",
+                                    "id": "315f767f-0243-4ab3-a140-e3c31e803c64",
                                     "name": "Updated",
                                     "originalRequest": {
                                         "url": {
@@ -1189,7 +1225,7 @@
                                     "_postman_previewlanguage": "json"
                                 },
                                 {
-                                    "id": "fdf5bbd5-84bf-4dfb-bcf0-ceb82ff40481",
+                                    "id": "b3b6c8d2-302f-4fba-95e2-5a3a09bde844",
                                     "name": "Unauthenticated",
                                     "originalRequest": {
                                         "url": {
@@ -1247,7 +1283,7 @@
                                     "_postman_previewlanguage": "text"
                                 },
                                 {
-                                    "id": "1ed922c3-8080-4aaa-8988-c6c2a8ac4d39",
+                                    "id": "28624b3a-3b93-415e-8926-ec92fc08011f",
                                     "name": "Not found",
                                     "originalRequest": {
                                         "url": {
@@ -1305,7 +1341,7 @@
                                     "_postman_previewlanguage": "text"
                                 },
                                 {
-                                    "id": "d877e797-6921-4ed5-9f18-a12790758080",
+                                    "id": "a7a3827c-6bff-4ea8-9879-95d98761edf2",
                                     "name": "Conflict",
                                     "originalRequest": {
                                         "url": {
@@ -1363,7 +1399,7 @@
                                     "_postman_previewlanguage": "text"
                                 },
                                 {
-                                    "id": "ddbde460-d6c8-45c5-b63a-717b3b839eeb",
+                                    "id": "ca3c09a0-9989-4497-9922-33dedea97374",
                                     "name": "Validation failed",
                                     "originalRequest": {
                                         "url": {
@@ -1435,7 +1471,7 @@
             "description": "",
             "item": [
                 {
-                    "id": "133863a3-9b3c-4a4c-8372-ef513ead954f",
+                    "id": "874a6523-6a8f-47ac-b4f3-1633e3d91553",
                     "name": "List my rentals",
                     "request": {
                         "name": "List my rentals",
@@ -1480,7 +1516,7 @@
                     },
                     "response": [
                         {
-                            "id": "9fde61c4-0f82-4304-9a37-fad9b319cbc3",
+                            "id": "2ac0db8f-b2b5-417a-8b2c-1761a5931d59",
                             "name": "Paginated rentals",
                             "originalRequest": {
                                 "url": {
@@ -1528,12 +1564,12 @@
                                     "value": "application/json"
                                 }
                             ],
-                            "body": "{\n  \"data\": [\n    {\n      \"id\": \"<integer>\",\n      \"book_id\": \"<integer>\",\n      \"status\": \"finished\",\n      \"rented_at\": \"<dateTime>\",\n      \"due_date\": \"<dateTime>\",\n      \"reading_progress\": \"<integer>\",\n      \"extended_count\": \"<integer>\",\n      \"created_at\": \"<dateTime>\",\n      \"updated_at\": \"<dateTime>\",\n      \"returned_at\": \"<dateTime>\",\n      \"book\": {\n        \"id\": \"<integer>\",\n        \"title\": \"<string>\",\n        \"author\": \"<string>\",\n        \"genre\": \"<string>\",\n        \"total_copies\": \"<integer>\",\n        \"available_copies\": \"<integer>\",\n        \"created_at\": \"<dateTime>\",\n        \"updated_at\": \"<dateTime>\",\n        \"description\": \"<string>\"\n      }\n    },\n    {\n      \"id\": \"<integer>\",\n      \"book_id\": \"<integer>\",\n      \"status\": \"finished\",\n      \"rented_at\": \"<dateTime>\",\n      \"due_date\": \"<dateTime>\",\n      \"reading_progress\": \"<integer>\",\n      \"extended_count\": \"<integer>\",\n      \"created_at\": \"<dateTime>\",\n      \"updated_at\": \"<dateTime>\",\n      \"returned_at\": \"<dateTime>\",\n      \"book\": {\n        \"id\": \"<integer>\",\n        \"title\": \"<string>\",\n        \"author\": \"<string>\",\n        \"genre\": \"<string>\",\n        \"total_copies\": \"<integer>\",\n        \"available_copies\": \"<integer>\",\n        \"created_at\": \"<dateTime>\",\n        \"updated_at\": \"<dateTime>\",\n        \"description\": \"<string>\"\n      }\n    }\n  ],\n  \"meta\": {\n    \"current_page\": \"<integer>\",\n    \"per_page\": \"<integer>\",\n    \"total\": \"<integer>\",\n    \"last_page\": \"<integer>\"\n  }\n}",
+                            "body": "{\n  \"data\": [\n    {\n      \"id\": \"<integer>\",\n      \"book_id\": \"<integer>\",\n      \"status\": \"finished\",\n      \"rented_at\": \"<dateTime>\",\n      \"due_date\": \"<dateTime>\",\n      \"reading_progress\": \"<integer>\",\n      \"extended_count\": \"<integer>\",\n      \"created_at\": \"<dateTime>\",\n      \"updated_at\": \"<dateTime>\",\n      \"returned_at\": \"<dateTime>\",\n      \"book\": {\n        \"id\": \"<integer>\",\n        \"title\": \"<string>\",\n        \"author\": \"<string>\",\n        \"genre\": \"<string>\",\n        \"total_copies\": \"<integer>\",\n        \"available_copies\": \"<integer>\",\n        \"created_at\": \"<dateTime>\",\n        \"updated_at\": \"<dateTime>\",\n        \"description\": \"<string>\"\n      }\n    },\n    {\n      \"id\": \"<integer>\",\n      \"book_id\": \"<integer>\",\n      \"status\": \"active\",\n      \"rented_at\": \"<dateTime>\",\n      \"due_date\": \"<dateTime>\",\n      \"reading_progress\": \"<integer>\",\n      \"extended_count\": \"<integer>\",\n      \"created_at\": \"<dateTime>\",\n      \"updated_at\": \"<dateTime>\",\n      \"returned_at\": \"<dateTime>\",\n      \"book\": {\n        \"id\": \"<integer>\",\n        \"title\": \"<string>\",\n        \"author\": \"<string>\",\n        \"genre\": \"<string>\",\n        \"total_copies\": \"<integer>\",\n        \"available_copies\": \"<integer>\",\n        \"created_at\": \"<dateTime>\",\n        \"updated_at\": \"<dateTime>\",\n        \"description\": \"<string>\"\n      }\n    }\n  ],\n  \"meta\": {\n    \"current_page\": \"<integer>\",\n    \"per_page\": \"<integer>\",\n    \"total\": \"<integer>\",\n    \"last_page\": \"<integer>\"\n  }\n}",
                             "cookie": [],
                             "_postman_previewlanguage": "json"
                         },
                         {
-                            "id": "d4245ac9-3fc2-4984-90bb-b4f2ebd5ece5",
+                            "id": "d4c4bcf5-1140-4e48-8778-dff19dc4dacb",
                             "name": "Unauthenticated",
                             "originalRequest": {
                                 "url": {
@@ -1582,7 +1618,7 @@
                     }
                 },
                 {
-                    "id": "1e35efdd-4f9e-4d52-96e9-125cabb66b4f",
+                    "id": "3374f56c-a984-42f3-b5eb-934d6b6c5ae8",
                     "name": "Rent a book",
                     "request": {
                         "name": "Rent a book",
@@ -1630,7 +1666,7 @@
                     },
                     "response": [
                         {
-                            "id": "60448826-bc5c-4c91-94fe-fff8dc2c5b3e",
+                            "id": "18b1503b-7409-4cf1-a4e1-a668ca0d3918",
                             "name": "Rental created",
                             "originalRequest": {
                                 "url": {
@@ -1686,7 +1722,7 @@
                             "_postman_previewlanguage": "json"
                         },
                         {
-                            "id": "cd8320bf-5690-47b2-8e07-a61d8c4ae95b",
+                            "id": "92954f56-69cf-40a1-963d-c730b8b774fb",
                             "name": "Unauthenticated",
                             "originalRequest": {
                                 "url": {
@@ -1732,7 +1768,7 @@
                             "_postman_previewlanguage": "text"
                         },
                         {
-                            "id": "538c2365-b831-495d-adf6-fddb3c4df19c",
+                            "id": "0b4b1683-26f4-4e3e-b4a9-6b1cec6628ec",
                             "name": "Not available",
                             "originalRequest": {
                                 "url": {
@@ -1778,7 +1814,7 @@
                             "_postman_previewlanguage": "text"
                         },
                         {
-                            "id": "637412e6-e511-4577-a702-85be68548eee",
+                            "id": "edda57bd-6eeb-4bd9-b11b-4223f54f4cd8",
                             "name": "Validation failed",
                             "originalRequest": {
                                 "url": {
@@ -1834,7 +1870,7 @@
                     "description": "",
                     "item": [
                         {
-                            "id": "6dcb8ca7-8321-46e4-9673-f05b0855f207",
+                            "id": "c2e60f23-eb0e-4f7b-a3bc-0dd65576e0e5",
                             "name": "Get my rental",
                             "request": {
                                 "name": "Get my rental",
@@ -1881,7 +1917,7 @@
                             },
                             "response": [
                                 {
-                                    "id": "b9866805-0add-4851-b83b-03c60bc77e3c",
+                                    "id": "f7fb0adb-5b1c-41b9-91ec-594199404a50",
                                     "name": "Rental",
                                     "originalRequest": {
                                         "url": {
@@ -1936,7 +1972,7 @@
                                     "_postman_previewlanguage": "json"
                                 },
                                 {
-                                    "id": "3b153e0a-7f24-4135-a044-543b87973410",
+                                    "id": "1f371152-cb41-4e7b-906a-458add0ad96e",
                                     "name": "Unauthenticated",
                                     "originalRequest": {
                                         "url": {
@@ -1981,7 +2017,7 @@
                                     "_postman_previewlanguage": "text"
                                 },
                                 {
-                                    "id": "e19d4cd4-408d-4fdb-91ce-5a43b6a53a49",
+                                    "id": "066a75be-68ca-49b8-ae9c-b2efd93fad95",
                                     "name": "Not found",
                                     "originalRequest": {
                                         "url": {
@@ -2036,7 +2072,7 @@
                             "description": "",
                             "item": [
                                 {
-                                    "id": "7150f3c3-58f4-4488-a9da-72e28f943df4",
+                                    "id": "679640e3-6848-41f2-811c-b06aaaf98954",
                                     "name": "Extend active rental",
                                     "request": {
                                         "name": "Extend active rental",
@@ -2097,7 +2133,7 @@
                                     },
                                     "response": [
                                         {
-                                            "id": "05150355-a075-48af-b129-50abe2fa9406",
+                                            "id": "8a1e8753-9e9d-4394-ae37-6df2f6c893c9",
                                             "name": "Extended",
                                             "originalRequest": {
                                                 "url": {
@@ -2166,7 +2202,7 @@
                                             "_postman_previewlanguage": "json"
                                         },
                                         {
-                                            "id": "d80599c3-dfb1-4e80-8f25-5c323e952672",
+                                            "id": "796b2727-4896-47f1-9291-bee5a27f5ac8",
                                             "name": "Unauthenticated",
                                             "originalRequest": {
                                                 "url": {
@@ -2225,7 +2261,7 @@
                                             "_postman_previewlanguage": "text"
                                         },
                                         {
-                                            "id": "2ce69dc6-b5cf-4d40-9797-c8b6845db8fd",
+                                            "id": "ac7f0a8d-fd98-4746-95cc-11df0ed2324b",
                                             "name": "Not found",
                                             "originalRequest": {
                                                 "url": {
@@ -2284,7 +2320,7 @@
                                             "_postman_previewlanguage": "text"
                                         },
                                         {
-                                            "id": "614f6e1e-c3ba-4e63-afcb-42897ce1e481",
+                                            "id": "4b42507f-3841-4d17-9980-882b2b7521ca",
                                             "name": "Not active",
                                             "originalRequest": {
                                                 "url": {
@@ -2343,7 +2379,7 @@
                                             "_postman_previewlanguage": "text"
                                         },
                                         {
-                                            "id": "b2a15851-c0b8-41ba-bb12-126e7611493e",
+                                            "id": "25fa9ea5-f3b3-4503-83a9-dad376756696",
                                             "name": "Validation failed",
                                             "originalRequest": {
                                                 "url": {
@@ -2414,7 +2450,7 @@
                             "description": "",
                             "item": [
                                 {
-                                    "id": "e9ac295f-3f3a-410c-93c3-84353c6cb378",
+                                    "id": "df37627a-dc6f-4d44-8922-4e575b10e55f",
                                     "name": "Get reading progress",
                                     "request": {
                                         "name": "Get reading progress",
@@ -2462,7 +2498,7 @@
                                     },
                                     "response": [
                                         {
-                                            "id": "7354a596-2b78-4901-b478-63294ba3e988",
+                                            "id": "f3c52f86-76a8-4610-9e64-0704fa174a00",
                                             "name": "Progress",
                                             "originalRequest": {
                                                 "url": {
@@ -2518,7 +2554,7 @@
                                             "_postman_previewlanguage": "json"
                                         },
                                         {
-                                            "id": "30495ffa-ce91-4f83-8668-548b6a890535",
+                                            "id": "964f2ee6-3f0b-416e-a09e-27c383af03d8",
                                             "name": "Unauthenticated",
                                             "originalRequest": {
                                                 "url": {
@@ -2564,7 +2600,7 @@
                                             "_postman_previewlanguage": "text"
                                         },
                                         {
-                                            "id": "7fe114c7-e992-449a-a55c-b334c0baef00",
+                                            "id": "0a436def-2b6b-466a-b816-5d2f421d5e34",
                                             "name": "Not found",
                                             "originalRequest": {
                                                 "url": {
@@ -2616,7 +2652,7 @@
                                     }
                                 },
                                 {
-                                    "id": "7671e88c-c716-4961-89b2-5265b6c6de18",
+                                    "id": "657f6394-5d2d-4e55-9cd7-bc6415568dfa",
                                     "name": "Update reading progress (active only)",
                                     "request": {
                                         "name": "Update reading progress (active only)",
@@ -2677,7 +2713,7 @@
                                     },
                                     "response": [
                                         {
-                                            "id": "bf98d947-cd00-468d-9479-9fb24a91eb75",
+                                            "id": "cffb0c2a-4243-4c5f-b301-fb532bee2af2",
                                             "name": "Updated",
                                             "originalRequest": {
                                                 "url": {
@@ -2746,7 +2782,7 @@
                                             "_postman_previewlanguage": "json"
                                         },
                                         {
-                                            "id": "e234f294-f3dd-44eb-ad65-2e9eb8bd2cfc",
+                                            "id": "5582e19d-ae7d-4587-8dfe-9515d27a95fa",
                                             "name": "Unauthenticated",
                                             "originalRequest": {
                                                 "url": {
@@ -2805,7 +2841,7 @@
                                             "_postman_previewlanguage": "text"
                                         },
                                         {
-                                            "id": "3f85b489-72b6-4009-9bf0-455c244e657b",
+                                            "id": "1ae2087b-354a-4523-a4c4-7e582c43e167",
                                             "name": "Not found",
                                             "originalRequest": {
                                                 "url": {
@@ -2864,7 +2900,7 @@
                                             "_postman_previewlanguage": "text"
                                         },
                                         {
-                                            "id": "d3741b6a-6477-4baa-90d4-0744257f82d6",
+                                            "id": "08edc3a4-416e-45f4-ad36-3c639dfebcda",
                                             "name": "Finished rental",
                                             "originalRequest": {
                                                 "url": {
@@ -2923,7 +2959,7 @@
                                             "_postman_previewlanguage": "text"
                                         },
                                         {
-                                            "id": "ebe91334-ab40-4c14-a571-3e0ffe420844",
+                                            "id": "91059ea1-9b22-4cb4-a070-0cf61f8118f7",
                                             "name": "Validation failed",
                                             "originalRequest": {
                                                 "url": {
@@ -2994,7 +3030,7 @@
                             "description": "",
                             "item": [
                                 {
-                                    "id": "ddfa9df7-2a24-4ff3-8fd6-e507a8e14117",
+                                    "id": "0b77ab6b-c429-4f5e-93c2-32fe6db4afbd",
                                     "name": "Finish rental and return copy",
                                     "request": {
                                         "name": "Finish rental and return copy",
@@ -3042,7 +3078,7 @@
                                     },
                                     "response": [
                                         {
-                                            "id": "75d39281-059d-4086-a4a0-8116426013a1",
+                                            "id": "dab31d7b-c5e1-4a58-8f03-e77494438d77",
                                             "name": "Finished",
                                             "originalRequest": {
                                                 "url": {
@@ -3098,7 +3134,7 @@
                                             "_postman_previewlanguage": "json"
                                         },
                                         {
-                                            "id": "2c1231fd-d5b6-4e67-9444-c2c1c0324c47",
+                                            "id": "a4430c23-eb60-4fee-a12b-ddf1a07fd469",
                                             "name": "Unauthenticated",
                                             "originalRequest": {
                                                 "url": {
@@ -3144,7 +3180,7 @@
                                             "_postman_previewlanguage": "text"
                                         },
                                         {
-                                            "id": "2ab63542-1dfb-4177-97f1-606f42e022dc",
+                                            "id": "66e59d99-394e-4a02-9c06-f633328d3baf",
                                             "name": "Not found",
                                             "originalRequest": {
                                                 "url": {
@@ -3190,7 +3226,7 @@
                                             "_postman_previewlanguage": "text"
                                         },
                                         {
-                                            "id": "79858a6b-dc2a-42d0-8c88-31dced97aa8a",
+                                            "id": "528ce283-0b24-415b-82fb-6f06a867efce",
                                             "name": "Already finished",
                                             "originalRequest": {
                                                 "url": {
@@ -3252,7 +3288,7 @@
             "description": "",
             "item": [
                 {
-                    "id": "d0aa5793-f458-4134-a128-8a60868498f1",
+                    "id": "b0092771-2b2d-43dd-8095-ac1dbd73861f",
                     "name": "Current user profile",
                     "request": {
                         "name": "Current user profile",
@@ -3287,7 +3323,7 @@
                     },
                     "response": [
                         {
-                            "id": "f9986082-843c-4103-aa7d-b48da9376be2",
+                            "id": "8fd30b19-846c-4c2d-a03d-879e23cdaff8",
                             "name": "Current authenticated user",
                             "originalRequest": {
                                 "url": {
@@ -3330,7 +3366,7 @@
                             "_postman_previewlanguage": "json"
                         },
                         {
-                            "id": "3636dc92-64dc-4523-9ba4-b984e310dda9",
+                            "id": "5d79748b-5c8d-4948-a226-6b698773baba",
                             "name": "Unauthenticated",
                             "originalRequest": {
                                 "url": {
@@ -3369,7 +3405,7 @@
                     }
                 },
                 {
-                    "id": "6254168e-8bc6-4f62-922d-0cb61ba5c2cb",
+                    "id": "ec5d3d0a-cf6c-4a9b-bcb8-1ce2a282e369",
                     "name": "Update current user profile",
                     "request": {
                         "name": "Update current user profile",
@@ -3417,7 +3453,7 @@
                     },
                     "response": [
                         {
-                            "id": "d15417e6-f386-41f1-ad91-7da4960fddfc",
+                            "id": "a841c08f-fb10-44b0-99cf-9907f76bd50d",
                             "name": "Updated current user profile",
                             "originalRequest": {
                                 "url": {
@@ -3473,7 +3509,7 @@
                             "_postman_previewlanguage": "json"
                         },
                         {
-                            "id": "0a729d84-09d0-4ade-b47e-3c8530303635",
+                            "id": "869f0352-678e-4575-a0a8-e14e2f391c05",
                             "name": "Unauthenticated",
                             "originalRequest": {
                                 "url": {
@@ -3519,7 +3555,7 @@
                             "_postman_previewlanguage": "text"
                         },
                         {
-                            "id": "d359000a-8323-4d89-9d2b-c8d1e36b7ecb",
+                            "id": "46882df1-3c09-443c-bdf8-7194436281d4",
                             "name": "Forbidden",
                             "originalRequest": {
                                 "url": {
@@ -3565,7 +3601,7 @@
                             "_postman_previewlanguage": "text"
                         },
                         {
-                            "id": "cbe4dfdb-887d-4ee6-91e5-0ede8175872c",
+                            "id": "e6d8ad9d-b5c3-42b1-b75a-864ff6336c24",
                             "name": "Validation failed",
                             "originalRequest": {
                                 "url": {
@@ -3621,7 +3657,7 @@
                     "description": "",
                     "item": [
                         {
-                            "id": "f9278a55-d46c-424b-9706-d7d43b7293f2",
+                            "id": "3fdc05bc-7e63-4fbb-9fac-e61d10e2e047",
                             "name": "Update current user password",
                             "request": {
                                 "name": "Update current user password",
@@ -3670,7 +3706,7 @@
                             },
                             "response": [
                                 {
-                                    "id": "f43868e3-f6ff-4906-bd55-501a4c24649a",
+                                    "id": "e0cf1b3f-e657-4707-b665-b1bbc8fbb4ee",
                                     "name": "Password updated successfully",
                                     "originalRequest": {
                                         "url": {
@@ -3727,7 +3763,7 @@
                                     "_postman_previewlanguage": "json"
                                 },
                                 {
-                                    "id": "4c5abfe0-6c7b-4fbe-8c74-c51cf7704264",
+                                    "id": "6cb7e905-aa7e-40b9-80dc-3443567e8f0c",
                                     "name": "Unauthenticated",
                                     "originalRequest": {
                                         "url": {
@@ -3774,7 +3810,7 @@
                                     "_postman_previewlanguage": "text"
                                 },
                                 {
-                                    "id": "4c0064b5-9f60-437a-aef3-c3a375e360f9",
+                                    "id": "37df1857-64d0-46b2-aa96-0bef96235260",
                                     "name": "Forbidden",
                                     "originalRequest": {
                                         "url": {
@@ -3821,7 +3857,7 @@
                                     "_postman_previewlanguage": "text"
                                 },
                                 {
-                                    "id": "d02b5e23-3c35-4e17-9784-bf0d610ffe69",
+                                    "id": "c9b665ea-7e9e-4a3b-b9c8-be3f21294abb",
                                     "name": "Validation failed",
                                     "originalRequest": {
                                         "url": {
@@ -3882,7 +3918,7 @@
             "description": "",
             "item": [
                 {
-                    "id": "07760c0e-7653-4c02-ae0f-97726d58e98f",
+                    "id": "93350df0-1e0f-438a-8bf1-8595716ba196",
                     "name": "Log in with email and password",
                     "request": {
                         "name": "Log in with email and password",
@@ -3922,7 +3958,7 @@
                     },
                     "response": [
                         {
-                            "id": "d5651b69-ff45-44ab-a432-8b0ab3c55360",
+                            "id": "1f7fb905-0775-4d02-b71c-7eda3f23f762",
                             "name": "Authenticated; returns profile and API token",
                             "originalRequest": {
                                 "url": {
@@ -3970,7 +4006,7 @@
                             "_postman_previewlanguage": "json"
                         },
                         {
-                            "id": "fb29acd2-f8c8-4aef-9e24-042d010df9ae",
+                            "id": "5778117b-b649-4bd1-b0a6-44436bc08de6",
                             "name": "Invalid credentials",
                             "originalRequest": {
                                 "url": {
@@ -4018,7 +4054,7 @@
                             "_postman_previewlanguage": "json"
                         },
                         {
-                            "id": "e2584e70-79f9-42ea-a38c-e48b31568e32",
+                            "id": "35fee1f7-82e7-4e38-a7e0-2816929e8a80",
                             "name": "Validation failed",
                             "originalRequest": {
                                 "url": {
@@ -4056,7 +4092,7 @@
                             "_postman_previewlanguage": "text"
                         },
                         {
-                            "id": "867ff16c-2e4a-4e57-9793-2aaa99df8959",
+                            "id": "ff59f4c8-11bf-47a0-bf23-8dd7494b773a",
                             "name": "Too many requests",
                             "originalRequest": {
                                 "url": {
@@ -4106,7 +4142,7 @@
             "description": "",
             "item": [
                 {
-                    "id": "ec1a666e-d00b-4b5b-8897-f7c698fd7ea1",
+                    "id": "3485f63e-5959-4a72-881f-1df25b804374",
                     "name": "Log out (revoke current token)",
                     "request": {
                         "name": "Log out (revoke current token)",
@@ -4141,7 +4177,7 @@
                     },
                     "response": [
                         {
-                            "id": "79f04bae-f548-4c41-a1fe-cf2bdb9ef123",
+                            "id": "a17f196b-9e0a-4d69-bdb8-3dfafdd7fbc4",
                             "name": "Current token revoked",
                             "originalRequest": {
                                 "url": {
@@ -4184,7 +4220,7 @@
                             "_postman_previewlanguage": "json"
                         },
                         {
-                            "id": "977d56dc-a111-4dc3-95aa-d5842b9740d4",
+                            "id": "32d748f3-1ff1-4291-a34c-a3a8b7b15d83",
                             "name": "Unauthenticated",
                             "originalRequest": {
                                 "url": {
@@ -4229,7 +4265,7 @@
             "description": "",
             "item": [
                 {
-                    "id": "a5ccc28a-f405-44ff-8e8e-f89c803db748",
+                    "id": "b10d9923-87b2-4885-bf9d-043479b55b7c",
                     "name": "Register a new user",
                     "request": {
                         "name": "Register a new user",
@@ -4269,7 +4305,7 @@
                     },
                     "response": [
                         {
-                            "id": "20d90458-10e0-4976-8d11-7792ba4250ac",
+                            "id": "dc1635bd-e46b-4cc1-9593-ee760e3e1a05",
                             "name": "User created; returns profile and API token",
                             "originalRequest": {
                                 "url": {
@@ -4317,7 +4353,7 @@
                             "_postman_previewlanguage": "json"
                         },
                         {
-                            "id": "9a04812b-cc58-464a-b788-1ecb2c1e1dde",
+                            "id": "97cbb5f7-404b-48e2-95fc-300afac988a6",
                             "name": "Validation failed",
                             "originalRequest": {
                                 "url": {
@@ -4371,7 +4407,7 @@
                     "description": "",
                     "item": [
                         {
-                            "id": "ee212477-9786-4c79-8ffb-cb39496ffa94",
+                            "id": "0bf0eaa5-7e94-427e-86da-3d24fdc8f5aa",
                             "name": "Liveness probe",
                             "request": {
                                 "name": "Liveness probe",
@@ -4402,7 +4438,7 @@
                             },
                             "response": [
                                 {
-                                    "id": "69d81ac0-3c3f-4bed-a3a2-ac57ba5eba7b",
+                                    "id": "1e1ecead-2256-4357-8360-4ad92fd5bc6e",
                                     "name": "Process is alive",
                                     "originalRequest": {
                                         "url": {
@@ -4450,7 +4486,7 @@
                     "description": "",
                     "item": [
                         {
-                            "id": "e79282cd-e40c-488f-8cc2-9d42b508ac00",
+                            "id": "a1dcf3ac-77a1-4174-925d-dc290a364154",
                             "name": "Readiness probe",
                             "request": {
                                 "name": "Readiness probe",
@@ -4481,7 +4517,7 @@
                             },
                             "response": [
                                 {
-                                    "id": "1e131712-af84-4321-850a-2c4f66b2e9be",
+                                    "id": "b4c6ba54-ecfc-4686-b43c-20e8561612bd",
                                     "name": "Database is reachable",
                                     "originalRequest": {
                                         "url": {
@@ -4517,7 +4553,7 @@
                                     "_postman_previewlanguage": "json"
                                 },
                                 {
-                                    "id": "e5fbc79c-0a2e-4808-9776-85ac059a0918",
+                                    "id": "83e2e97f-4525-4e6a-b9da-6373b64c336d",
                                     "name": "Database unavailable",
                                     "originalRequest": {
                                         "url": {
@@ -4567,7 +4603,7 @@
             "description": "",
             "item": [
                 {
-                    "id": "3611cca5-1955-4690-91b4-b79270ae689b",
+                    "id": "d9171b7b-a774-4071-ac99-ed0345ca60cf",
                     "name": "List users (paginated)",
                     "request": {
                         "name": "List users (paginated)",
@@ -4612,7 +4648,7 @@
                     },
                     "response": [
                         {
-                            "id": "426fa77a-db0b-487a-b01e-5f794bd3088d",
+                            "id": "2c3e2148-5a32-466a-b2e8-6eaf479f70df",
                             "name": "Paginated users",
                             "originalRequest": {
                                 "url": {
@@ -4665,7 +4701,7 @@
                             "_postman_previewlanguage": "json"
                         },
                         {
-                            "id": "4179ffe7-7ad9-4023-97dd-98632ac07cc6",
+                            "id": "3a1093e0-fd33-4ff7-a952-167ed314427f",
                             "name": "Unauthenticated",
                             "originalRequest": {
                                 "url": {
@@ -4708,7 +4744,7 @@
                             "_postman_previewlanguage": "text"
                         },
                         {
-                            "id": "52b06c78-2e26-464c-86f7-e89ec9164fc7",
+                            "id": "1b9c1da8-400b-49eb-8468-a93d1cd7fb4b",
                             "name": "Validation failed",
                             "originalRequest": {
                                 "url": {
@@ -4757,7 +4793,7 @@
                     }
                 },
                 {
-                    "id": "e09ad416-ffd4-45b6-bd64-30340e04c207",
+                    "id": "10fcb886-02ee-4f95-9041-c836af40f4b5",
                     "name": "Create user",
                     "request": {
                         "name": "Create user",
@@ -4805,7 +4841,7 @@
                     },
                     "response": [
                         {
-                            "id": "c1f8516a-1cf1-4d5f-ad82-d0f9f188ee8d",
+                            "id": "9f8b5870-4687-4307-a62e-fe1c1e078f19",
                             "name": "Created",
                             "originalRequest": {
                                 "url": {
@@ -4861,7 +4897,7 @@
                             "_postman_previewlanguage": "json"
                         },
                         {
-                            "id": "0f40eead-124f-4b77-9539-edc718c4e763",
+                            "id": "5a162c27-5c00-4415-8a2e-4b6fb18fbdf4",
                             "name": "Unauthenticated",
                             "originalRequest": {
                                 "url": {
@@ -4907,7 +4943,7 @@
                             "_postman_previewlanguage": "text"
                         },
                         {
-                            "id": "8c285923-5507-441a-9454-f8e14c974c59",
+                            "id": "88e2ae79-db45-469e-9359-b577e1ae7baf",
                             "name": "Validation failed",
                             "originalRequest": {
                                 "url": {
@@ -4963,7 +4999,7 @@
                     "description": "",
                     "item": [
                         {
-                            "id": "49fdde79-f48b-4c75-b1ac-45852875036c",
+                            "id": "7cd8a1f9-e9ce-4714-8a36-fc61acb43d6c",
                             "name": "Get user by id",
                             "request": {
                                 "name": "Get user by id",
@@ -5010,7 +5046,7 @@
                             },
                             "response": [
                                 {
-                                    "id": "448ee356-adac-4e58-a57e-fd0744868e6f",
+                                    "id": "0a4c4c9e-9477-4b1c-bc7f-8f48851141a6",
                                     "name": "User",
                                     "originalRequest": {
                                         "url": {
@@ -5065,7 +5101,7 @@
                                     "_postman_previewlanguage": "json"
                                 },
                                 {
-                                    "id": "46b27520-87b3-4a1c-97b1-436a8161a5a3",
+                                    "id": "bf8f1dc3-0311-4e96-979f-7540514b13cd",
                                     "name": "Unauthenticated",
                                     "originalRequest": {
                                         "url": {
@@ -5110,7 +5146,7 @@
                                     "_postman_previewlanguage": "text"
                                 },
                                 {
-                                    "id": "337ef854-c854-4800-863c-b027b95783bd",
+                                    "id": "adb0a787-1a88-4bad-8534-02afd357b920",
                                     "name": "Not found",
                                     "originalRequest": {
                                         "url": {
@@ -5161,7 +5197,7 @@
                             }
                         },
                         {
-                            "id": "9ebd8139-d3fc-4e97-be99-80f93d9a0584",
+                            "id": "880ddc00-407c-404c-b263-987699ee55bc",
                             "name": "Delete user (not self; not if rentals exist)",
                             "request": {
                                 "name": "Delete user (not self; not if rentals exist)",
@@ -5208,7 +5244,7 @@
                             },
                             "response": [
                                 {
-                                    "id": "25ddad3d-13cf-4ec9-b387-f40822160f16",
+                                    "id": "71ac02f1-e285-4c79-8bef-ea3b1e0310eb",
                                     "name": "Deleted",
                                     "originalRequest": {
                                         "url": {
@@ -5263,7 +5299,7 @@
                                     "_postman_previewlanguage": "json"
                                 },
                                 {
-                                    "id": "f74b75dc-48a2-495f-b9b7-2070a13c57b6",
+                                    "id": "7a74d8cc-4f22-4779-b006-fe07a621d9f6",
                                     "name": "Unauthenticated",
                                     "originalRequest": {
                                         "url": {
@@ -5308,7 +5344,7 @@
                                     "_postman_previewlanguage": "text"
                                 },
                                 {
-                                    "id": "1af7d96f-0148-4a72-b05c-9b26c1a15888",
+                                    "id": "bf2660cf-c251-4b85-92c0-26a1e77ba16e",
                                     "name": "Not found",
                                     "originalRequest": {
                                         "url": {
@@ -5353,7 +5389,7 @@
                                     "_postman_previewlanguage": "text"
                                 },
                                 {
-                                    "id": "5e0dfce9-c388-4e96-ae51-ee779fdf8973",
+                                    "id": "d1b128ea-f3e4-4ecb-b285-e1e316a376fb",
                                     "name": "Conflict (self-delete or rental history)",
                                     "originalRequest": {
                                         "url": {
@@ -5404,7 +5440,7 @@
                             }
                         },
                         {
-                            "id": "34c178b2-8467-4013-880a-a741e4a07823",
+                            "id": "6bfc8d8c-a106-4cbb-8674-bb5c3582fa6e",
                             "name": "Update user",
                             "request": {
                                 "name": "Update user",
@@ -5464,7 +5500,7 @@
                             },
                             "response": [
                                 {
-                                    "id": "4e474998-cef1-4c44-9aad-5341026ec128",
+                                    "id": "a7255026-8629-4c6a-8f28-4555bad9ba60",
                                     "name": "Updated",
                                     "originalRequest": {
                                         "url": {
@@ -5532,7 +5568,7 @@
                                     "_postman_previewlanguage": "json"
                                 },
                                 {
-                                    "id": "ec47e215-db33-4c6e-b96d-92339acba5d7",
+                                    "id": "b45bc4fa-f53c-487e-ade0-57f4885228dc",
                                     "name": "Unauthenticated",
                                     "originalRequest": {
                                         "url": {
@@ -5590,7 +5626,7 @@
                                     "_postman_previewlanguage": "text"
                                 },
                                 {
-                                    "id": "5e17b292-dc59-4f27-872a-6f517272c6e7",
+                                    "id": "4270e77a-10ca-455f-88eb-01dfc69926d4",
                                     "name": "Not found",
                                     "originalRequest": {
                                         "url": {
@@ -5648,7 +5684,7 @@
                                     "_postman_previewlanguage": "text"
                                 },
                                 {
-                                    "id": "d46b702a-4a44-4b45-a8af-d5bd17886e53",
+                                    "id": "4e3e394f-f4bb-44ee-8843-5a62b23c4fd1",
                                     "name": "Validation failed",
                                     "originalRequest": {
                                         "url": {
@@ -5728,7 +5764,7 @@
         }
     ],
     "info": {
-        "_postman_id": "1357c106-90fa-4111-8b4f-ae1473e30c5d",
+        "_postman_id": "c5519a2e-be42-40de-81d4-3b0d62919f1d",
         "name": "Library API",
         "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
         "description": {

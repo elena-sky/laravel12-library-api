@@ -6,16 +6,21 @@ use App\Enums\BookRentStatus;
 use App\Exceptions\ResourceConflictException;
 use App\Models\Book;
 use App\Models\BookRent;
+use App\Support\BookListCache;
 use Illuminate\Support\Facades\DB;
 
 final class FinishBookRentAction
 {
+    public function __construct(
+        private readonly BookListCache $bookListCache,
+    ) {}
+
     /**
      * @throws ResourceConflictException
      */
     public function execute(BookRent $rent): BookRent
     {
-        return DB::transaction(function () use ($rent): BookRent {
+        $finished = DB::transaction(function () use ($rent): BookRent {
             /** @var BookRent $lockedRent */
             $lockedRent = BookRent::query()->whereKey($rent->getKey())->lockForUpdate()->firstOrFail();
 
@@ -35,5 +40,9 @@ final class FinishBookRentAction
 
             return $lockedRent->refresh();
         });
+
+        $this->bookListCache->bumpVersion();
+
+        return $finished;
     }
 }

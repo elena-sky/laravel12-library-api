@@ -5,9 +5,14 @@ namespace App\Actions\Book;
 use App\Enums\BookRentStatus;
 use App\Exceptions\ResourceConflictException;
 use App\Models\Book;
+use App\Support\BookListCache;
 
 final class DeleteBookAction
 {
+    public function __construct(
+        private readonly BookListCache $bookListCache,
+    ) {}
+
     /**
      * @throws ResourceConflictException
      */
@@ -22,5 +27,7 @@ final class DeleteBookAction
         }
 
         $book->delete();
+
+        $this->bookListCache->bumpVersion();
     }
 }

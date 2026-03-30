@@ -19,7 +19,7 @@ class DeleteBookActionTest extends TestCase
         $book = Book::factory()->create();
         BookRent::factory()->for($book)->finished()->create();
 
-        (new DeleteBookAction)->execute($book);
+        $this->app->make(DeleteBookAction::class)->execute($book);
 
         $this->assertDatabaseMissing('books', ['id' => $book->id]);
     }
@@ -32,6 +32,6 @@ class DeleteBookActionTest extends TestCase
         $this->expectException(ResourceConflictException::class);
         $this->expectExceptionMessage('Cannot delete book with active rentals');
 
-        (new DeleteBookAction)->execute($book);
+        $this->app->make(DeleteBookAction::class)->execute($book);
     }
 }

@@ -3,6 +3,7 @@
 namespace App\Actions\Book;
 
 use App\Models\Book;
+use App\Support\BookListCache;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Builder;
 
@@ -18,6 +19,10 @@ final class ListBooksAction
         'total_copies',
     ];
 
+    public function __construct(
+        private readonly BookListCache $bookListCache,
+    ) {}
+
     /**
      * @param  array{
      *     title?: ?string,
@@ -26,20 +31,30 @@ final class ListBooksAction
      *     available_only?: bool,
      *     sort_by: string,
      *     sort_dir: string,
-     *     per_page: int
+     *     per_page: int,
+     *     page: int
      * }  $filters
      */
     public function execute(array $filters): LengthAwarePaginator
     {
-        $query = Book::query();
+        $normalized = $this->bookListCache->normalizeListFilters($filters);
 
-        $this->applyFilters($query, $filters);
+        return $this->bookListCache->remember($normalized, function () use ($normalized): LengthAwarePaginator {
+            $query = Book::query();
 
-        $sortBy = $filters['sort_by'];
-        $sortDir = $filters['sort_dir'];
-        $query->orderBy($sortBy, $sortDir);
+            $this->applyFilters($query, $normalized);
 
-        return $query->paginate($filters['per_page']);
+            $sortBy = $normalized['sort_by'];
+            $sortDir = $normalized['sort_dir'];
+            $query->orderBy($sortBy, $sortDir);
+
+            return $query->paginate(
+                $normalized['per_page'],
+                ['*'],
+                'page',
+                $normalized['page']
+            );
+        });
     }
 
     /**
@@ -49,17 +64,17 @@ final class ListBooksAction
     private function applyFilters(Builder $query, array $filters): void
     {
         if (! empty($filters['title'])) {
-            $term = '%'.mb_strtolower((string) $filters['title']).'%';
+            $term = '%'.(string) $filters['title'].'%';
             $query->whereRaw('LOWER(title) LIKE ?', [$term]);
         }
 
         if (! empty($filters['author'])) {
-            $term = '%'.mb_strtolower((string) $filters['author']).'%';
+            $term = '%'.(string) $filters['author'].'%';
             $query->whereRaw('LOWER(author) LIKE ?', [$term]);
         }
 
         if (! empty($filters['genre'])) {
-            $term = '%'.mb_strtolower((string) $filters['genre']).'%';
+            $term = '%'.(string) $filters['genre'].'%';
             $query->whereRaw('LOWER(genre) LIKE ?', [$term]);
         }
 

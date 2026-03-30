@@ -27,6 +27,7 @@ class ListBooksRequest extends FormRequest
             'sort_by' => ['sometimes', 'string', Rule::in(ListBooksAction::SORT_WHITELIST)],
             'sort_dir' => ['sometimes', 'string', Rule::in(['asc', 'desc'])],
             'per_page' => ['sometimes', 'integer', 'min:1', 'max:100'],
+            'page' => ['sometimes', 'integer', 'min:1'],
         ];
     }
 
@@ -36,6 +37,7 @@ class ListBooksRequest extends FormRequest
             'sort_by' => $this->input('sort_by', 'title'),
             'sort_dir' => $this->input('sort_dir', 'asc'),
             'per_page' => $this->input('per_page', 15),
+            'page' => $this->input('page', 1),
         ]);
     }
 
@@ -47,7 +49,8 @@ class ListBooksRequest extends FormRequest
      *     available_only?: bool,
      *     sort_by: string,
      *     sort_dir: string,
-     *     per_page: int
+     *     per_page: int,
+     *     page: int
      * }
      */
     public function filtersForAction(): array
@@ -63,6 +66,7 @@ class ListBooksRequest extends FormRequest
             'sort_by' => $v['sort_by'],
             'sort_dir' => $v['sort_dir'],
             'per_page' => (int) $v['per_page'],
+            'page' => (int) $v['page'],
         ];
     }
 }

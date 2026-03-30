@@ -7,17 +7,22 @@ use App\Exceptions\ResourceConflictException;
 use App\Models\Book;
 use App\Models\BookRent;
 use App\Models\User;
+use App\Support\BookListCache;
 use Carbon\CarbonInterface;
 use Illuminate\Support\Facades\DB;
 
 final class RentBookAction
 {
+    public function __construct(
+        private readonly BookListCache $bookListCache,
+    ) {}
+
     /**
      * @throws ResourceConflictException
      */
     public function execute(User $user, int $bookId, CarbonInterface $dueDate): BookRent
     {
-        return DB::transaction(function () use ($user, $bookId, $dueDate): BookRent {
+        $rent = DB::transaction(function () use ($user, $bookId, $dueDate): BookRent {
             /** @var Book $locked */
             $locked = Book::query()->whereKey($bookId)->lockForUpdate()->firstOrFail();
 
@@ -39,5 +44,9 @@ final class RentBookAction
                 'extended_count' => 0,
             ]);
         });
+
+        $this->bookListCache->bumpVersion();
+
+        return $rent;
     }
 }

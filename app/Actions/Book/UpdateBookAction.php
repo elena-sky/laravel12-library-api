@@ -3,9 +3,14 @@
 namespace App\Actions\Book;
 
 use App\Models\Book;
+use App\Support\BookListCache;
 
 final class UpdateBookAction
 {
+    public function __construct(
+        private readonly BookListCache $bookListCache,
+    ) {}
+
     /**
      * @param  array{
      *     title?: string,
@@ -20,6 +25,8 @@ final class UpdateBookAction
     {
         $book->fill($payload);
         $book->save();
+
+        $this->bookListCache->bumpVersion();
 
         return $book->refresh();
     }

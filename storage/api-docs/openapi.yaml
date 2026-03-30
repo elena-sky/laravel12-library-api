@@ -74,6 +74,14 @@ paths:
             default: 15
             maximum: 100
             minimum: 1
+        -
+          name: page
+          in: query
+          required: false
+          schema:
+            type: integer
+            default: 1
+            minimum: 1
       responses:
         '200':
           description: 'Paginated books'

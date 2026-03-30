@@ -17,7 +17,7 @@ use OpenApi\Attributes as OA;
  *
  * List search uses case-insensitive SQL substring match (LIKE), not full-text search — assignment trade-off.
  * OpenAPI query params: {@see ListBooksAction::SORT_WHITELIST} for `sort_by` enum;
- * defaults `sort_by=title`, `sort_dir=asc`, `per_page=15` — {@see ListBooksRequest}.
+ * defaults `sort_by=title`, `sort_dir=asc`, `per_page=15`, `page=1` — {@see ListBooksRequest}.
  */
 interface BookControllerInterface
 {
@@ -62,6 +62,12 @@ interface BookControllerInterface
                 in: 'query',
                 required: false,
                 schema: new OA\Schema(type: 'integer', minimum: 1, maximum: 100, default: 15)
+            ),
+            new OA\Parameter(
+                name: 'page',
+                in: 'query',
+                required: false,
+                schema: new OA\Schema(type: 'integer', minimum: 1, default: 1)
             ),
         ],
         responses: [

@@ -13,7 +13,7 @@ class CreateBookActionTest extends TestCase
 
     public function test_creates_book_from_payload(): void
     {
-        $book = (new CreateBookAction)->execute([
+        $book = $this->app->make(CreateBookAction::class)->execute([
             'title' => 'Dune',
             'author' => 'Herbert',
             'genre' => 'Sci-Fi',
@@ -34,7 +34,7 @@ class CreateBookActionTest extends TestCase
 
     public function test_omitted_description_is_null(): void
     {
-        $book = (new CreateBookAction)->execute([
+        $book = $this->app->make(CreateBookAction::class)->execute([
             'title' => 'T',
             'author' => 'A',
             'genre' => 'G',

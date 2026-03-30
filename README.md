@@ -54,7 +54,7 @@ Self-service `/user` always uses the token’s user only.
 
 | Method | Path | Notes |
 |--------|------|--------|
-| `GET` | `/books` | Query: `title`, `author`, `genre` — case-insensitive substring (`LIKE`). `available_only` (boolean). `sort_by` whitelist: `title`, `author`, `genre`, `created_at`, `available_copies`, `total_copies`; `sort_dir` `asc`/`desc`. Defaults: `sort_by=title`, `sort_dir=asc`, `per_page=15` (max 100). |
+| `GET` | `/books` | Query: `title`, `author`, `genre` — case-insensitive substring (`LIKE`). `available_only` (boolean). `sort_by` whitelist: `title`, `author`, `genre`, `created_at`, `available_copies`, `total_copies`; `sort_dir` `asc`/`desc`. Pagination: `per_page` (default 15, max 100), `page` (default 1). |
 | `POST` | `/books` | Create; `available_copies` defaults to `total_copies` if omitted. |
 | `GET` | `/books/{id}` | |
 | `PATCH` | `/books/{id}` | |
@@ -98,6 +98,14 @@ The domain maps cleanly to resources (`users`, `books`, `rentals`). REST keeps c
 - **Validation** — Form Request classes per action; policies align with authorization for books, users, and rentals.
 - **Domain operations** — `app/Actions/{Book,BookRent,User}/` hold use cases; no separate `DTOs/` or `Services/` trees.
 
+### Caching strategy
+
+- Only **`GET /books`** list responses are cached (not single-book `GET /books/{id}`, not rentals or users).
+- Cache keys include **filters, sort, pagination**, and a **catalog version** prefix (`books:index:v{n}:…`). Search strings in the key are **trimmed and lowercased** so equivalent queries share one entry; the payload is **key-sorted** before hashing for a stable key.
+- The version counter (`books:index:version`) is stored **without TTL**; list entries use TTL **`BOOK_LIST_CACHE_TTL`** (default **300** seconds, see [`config/library.php`](config/library.php)).
+- The version is **incremented** after: book create / update / delete, rent start (`RentBookAction`), rent finish (`FinishBookRentAction`). Not bumped for extend-only or reading-progress updates.
+- This avoids **cache tags** and stays compatible with simple Laravel drivers (`file`, `database`, `array` in CI, etc.).
+
 **Second-iteration ideas:** cap rent extensions; rate limits on heavy list endpoints; curl/Postman collection; RBAC if requirements grow.
 
 **Structural trade-off:** Moving OpenAPI off interfaces onto concrete controllers would shrink `AppServiceProvider` and route indirection at the cost of keeping the contract adjacent to HTTP handlers.
@@ -126,7 +134,7 @@ The domain maps cleanly to resources (`users`, `books`, `rentals`). REST keeps c
 | Database diagram | **Done** — [`docs/database-diagram.md`](docs/database-diagram.md) (Mermaid + PNG export) |
 | DDD-style folder structure | **Partial** — domain-oriented `Actions/`, not full DDD layout |
 | API rate limiting | **Partial** — named limiter on `login` only |
-| Caching strategy (e.g. book lists) | **Not implemented** |
+| Caching strategy (e.g. book lists) | **Done** — versioned `GET /books` cache; [`app/Support/BookListCache.php`](app/Support/BookListCache.php) |
 
 ## Quick links
 

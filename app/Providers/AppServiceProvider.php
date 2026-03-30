@@ -19,6 +19,7 @@ use App\Http\Controllers\Api\RegisterUserController;
 use App\Http\Controllers\Api\StatusController;
 use App\Http\Controllers\Api\UserController;
 use App\Models\BookRent;
+use App\Support\BookListCache;
 use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
@@ -45,6 +46,8 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(UserControllerInterface::class, UserController::class);
         $this->app->bind(BookControllerInterface::class, BookController::class);
         $this->app->bind(BookRentControllerInterface::class, BookRentController::class);
+
+        $this->app->singleton(BookListCache::class, fn (): BookListCache => BookListCache::fromConfig());
     }
 
     /**

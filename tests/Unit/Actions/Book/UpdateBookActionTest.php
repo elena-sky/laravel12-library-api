@@ -20,7 +20,7 @@ class UpdateBookActionTest extends TestCase
             'available_copies' => 10,
         ]);
 
-        $updated = (new UpdateBookAction)->execute($book, ['title' => 'New']);
+        $updated = $this->app->make(UpdateBookAction::class)->execute($book, ['title' => 'New']);
 
         $this->assertSame('New', $updated->title);
         $this->assertSame('Same', $updated->author);
