@@ -3,7 +3,9 @@
 namespace App\Http\Contracts;
 
 use App\Actions\Book\ListBooksAction;
+use App\Http\Requests\Book\DeleteBookRequest;
 use App\Http\Requests\Book\ListBooksRequest;
+use App\Http\Requests\Book\ShowBookRequest;
 use App\Http\Requests\Book\StoreBookRequest;
 use App\Http\Requests\Book\UpdateBookRequest;
 use App\Models\Book;
@@ -115,7 +117,7 @@ interface BookControllerInterface
             new OA\Response(response: 404, description: 'Not found'),
         ]
     )]
-    public function show(Book $book): JsonResponse;
+    public function show(ShowBookRequest $request, Book $book): JsonResponse;
 
     #[OA\Patch(
         path: '/books/{book}',
@@ -164,5 +166,5 @@ interface BookControllerInterface
             new OA\Response(response: 409, description: 'Active rentals'),
         ]
     )]
-    public function destroy(Book $book): JsonResponse;
+    public function destroy(DeleteBookRequest $request, Book $book): JsonResponse;
 }
