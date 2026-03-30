@@ -34,7 +34,8 @@ services:
       DB_DATABASE: ${DB_DATABASE:-library}
       DB_USERNAME: ${DB_USERNAME:-library_user}
       DB_PASSWORD: ${DB_PASSWORD:?Non_empty_DB_PASSWORD_required_in_dotenv}
-    command: php artisan serve --host=0.0.0.0 --port=8000
+    command: >
+      sh -c "php artisan config:clear --no-ansi 2>/dev/null || true && exec php artisan serve --no-reload --host=0.0.0.0 --port=8000"
     healthcheck:
       test:
         [

@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-$path = dirname(__DIR__).'/postman/Library_API.postman_collection.json';
+$path = dirname(__DIR__).'/docs/postman/Library_API.postman_collection.json';
 
 if (! is_file($path)) {
     fwrite(STDERR, "Missing {$path}; run composer postman:generate first.\n");
