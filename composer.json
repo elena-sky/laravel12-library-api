@@ -74,6 +74,9 @@
         "postman:prefilled": [
             "@php scripts/postman_build_prefilled.php"
         ],
+        "verify:postman": [
+            "@php scripts/verify_postman_prefilled.php"
+        ],
         "quality": [
             "@lint",
             "@test:ci"
