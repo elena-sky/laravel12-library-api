@@ -120,7 +120,7 @@ The domain maps cleanly to resources (`users`, `books`, `rentals`). REST keeps c
 | Unit / feature tests | **Done** — PHPUnit; `composer test`, `composer test:ci`, `composer quality` |
 | Swagger / OpenAPI (REST) | **Done** — `composer docs:generate` (alias `openapi`); attributes on contracts + [`app/OpenApi/OpenApiInfo.php`](app/OpenApi/OpenApiInfo.php) |
 | GraphQL SDL + Playground | **Not used** — REST chosen |
-| Dockerized dev environment | **Not included** |
+| Dockerized dev environment | **Done** — [`Dockerfile`](Dockerfile), [`docker-compose.yml`](docker-compose.yml); see [Run with Docker](#run-with-docker) |
 | DDD-style folder structure | **Partial** — domain-oriented `Actions/`, not full DDD layout |
 | API rate limiting | **Partial** — named limiter on `login` only |
 | Caching strategy (e.g. book lists) | **Not implemented** |
@@ -129,7 +129,7 @@ The domain maps cleanly to resources (`users`, `books`, `rentals`). REST keeps c
 
 - [x] **Project code** in this repository (root: `laravel12-library-api/`).
 - [x] **README.md** — setup, chosen architecture (REST + justification), endpoint documentation, trade-offs / design notes.
-- [ ] **Optional Docker** — not provided.
+- [x] **Optional Docker** — [`Dockerfile`](Dockerfile) + [`docker-compose.yml`](docker-compose.yml); [Run with Docker](#run-with-docker).
 - [ ] **Optional Postman / GraphQL collection** — not provided.
 - [ ] **Optional database diagram** — not provided.
 
@@ -217,6 +217,35 @@ php artisan serve
 ```
 
 Example: `GET http://localhost:8000/api/v1/status/liveness` → **200** with unified JSON.
+
+## Run with Docker
+
+Optional local stack: **PHP 8.3** (`app`) + **PostgreSQL 16** (`db`). Requires **Docker Engine** and **Docker Compose v2**.
+
+**Compared to native setup:** keep a single [`.env.example`](.env.example) → `.env`. For Docker, Compose sets **`DB_HOST=db`**, **`APP_URL=http://localhost:${APP_PORT:-8000}`**, and DB credentials on the `app` container — your `.env` can still say `DB_HOST=127.0.0.1` for running PHP on the host; those values are overridden inside the container. **Postgres is not published to the host** (no port `5432` mapping), so nothing conflicts with a local PostgreSQL; only the API port is exposed.
+
+**`DB_PASSWORD`:** must be **non-empty** in `.env`. If unset, `docker compose` fails immediately with an error referencing `Non_empty_DB_PASSWORD_required_in_dotenv`.
+
+**`APP_PORT`:** default host port **8000** (`${APP_PORT:-8000}` → container port **8000**). If 8000 is busy: `APP_PORT=8080 docker compose up -d`.
+
+### First-time flow (recommended order)
+
+`docker compose run` can start dependencies, but starting **only Postgres first** is easier to follow:
+
+1. `cp .env.example .env` and set a **non-empty** `DB_PASSWORD` (and align `DB_DATABASE` / `DB_USERNAME` with `.env.example` defaults if you use them).
+2. `docker compose build`
+3. `docker compose up -d db` — wait until `db` is healthy (`docker compose ps` shows `healthy`).
+4. `docker compose run --rm app composer install`
+5. `docker compose run --rm app php artisan key:generate`
+6. `docker compose up -d` — starts `app` (and keeps `db`).
+7. `docker compose exec app php artisan migrate`
+8. Optional: `docker compose exec app php artisan db:seed`
+
+**API:** `http://localhost:8000/api/v1/...` (or your `APP_PORT`). Example: `GET http://localhost:8000/api/v1/status/liveness`.
+
+**Liveness in Docker:** the `app` service has a Compose **`healthcheck`** that curls `http://127.0.0.1:8000/api/v1/status/liveness` inside the container (same route as production liveness). After `docker compose up -d`, use `docker compose ps` — `app` shows **`healthy`** once Laravel responds. Rebuild the image after pulling changes (`docker compose build`) so the image includes `curl` used by the check.
+
+**Stop:** `docker compose down`. **Reset DB volume:** `docker compose down -v`.
 
 ## Development & CI
 
