@@ -66,9 +66,13 @@
         "openapi": "@docs:generate",
         "postman:generate": [
             "@docs:generate",
-            "@php -r \"is_dir('postman') || mkdir('postman', 0755, true);\"",
-            "npx --yes openapi-to-postmanv2@6 -s storage/api-docs/openapi.yaml -o postman/Library_API.postman_collection.json -p",
-            "@php scripts/postman_apply_defaults.php"
+            "@php -r \"is_dir('docs/postman') || mkdir('docs/postman', 0755, true);\"",
+            "npx --yes openapi-to-postmanv2@6 -s storage/api-docs/openapi.yaml -o docs/postman/Library_API.postman_collection.json -p",
+            "@php scripts/postman_apply_defaults.php",
+            "@php scripts/postman_build_prefilled.php"
+        ],
+        "postman:prefilled": [
+            "@php scripts/postman_build_prefilled.php"
         ],
         "quality": [
             "@lint",

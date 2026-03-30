@@ -4,9 +4,9 @@ Simple view of **domain tables** and how they relate. Laravel/Sanctum framework 
 
 ## ER diagram
 
-Rendered export (PNG):
+Rendered export (PNG, stored under [`diagrams/`](diagrams/)):
 
-![Library API database ER diagram](mermaid-diagram-2026-03-30-102825.png)
+![Library API database ER diagram](diagrams/mermaid-diagram-2026-03-30-102825.png)
 
 Editable source (Mermaid):
 

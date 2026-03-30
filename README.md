@@ -130,8 +130,8 @@ The domain maps cleanly to resources (`users`, `books`, `rentals`). REST keeps c
 | Swagger / OpenAPI (REST) | **Done** — `composer docs:generate` (alias `openapi`); attributes on contracts + [`app/OpenApi/OpenApiInfo.php`](app/OpenApi/OpenApiInfo.php) |
 | GraphQL SDL + Playground | **Not used** — REST chosen |
 | Dockerized dev environment | **Done** — [`Dockerfile`](Dockerfile), [`docker-compose.yml`](docker-compose.yml); see [Run the application (Docker)](#run-the-application-docker) |
-| Postman collection | **Done** — [`postman/Library_API.postman_collection.json`](postman/Library_API.postman_collection.json); regen: `composer postman:generate` (needs **Node.js** + **npx**) |
-| Database diagram | **Done** — [`docs/database-diagram.md`](docs/database-diagram.md) (Mermaid + PNG export) |
+| Postman collection | **Done** — [`docs/postman/Library_API.postman_collection.json`](docs/postman/Library_API.postman_collection.json) (OpenAPI) + [`docs/postman/Library_API.postman_collection.prefilled.json`](docs/postman/Library_API.postman_collection.prefilled.json) (demo-filled); regen: `composer postman:generate` / `composer postman:prefilled` |
+| Database diagram | **Done** — [`docs/database-diagram.md`](docs/database-diagram.md) (Mermaid + PNG under [`docs/diagrams/`](docs/diagrams/)) |
 | DDD-style folder structure | **Partial** — domain-oriented `Actions/`, not full DDD layout |
 | API rate limiting | **Partial** — named limiter on `login` only |
 | Caching strategy (e.g. book lists) | **Done** — versioned `GET /books` cache; [`app/Support/BookListCache.php`](app/Support/BookListCache.php) |
@@ -141,8 +141,9 @@ The domain maps cleanly to resources (`users`, `books`, `rentals`). REST keeps c
 | Topic | Where |
 |--------|--------|
 | Docker runbook | [Run the application (Docker)](#run-the-application-docker) — [`Dockerfile`](Dockerfile), [`docker-compose.yml`](docker-compose.yml), [`.dockerignore`](.dockerignore) |
-| Postman | [`postman/Library_API.postman_collection.json`](postman/Library_API.postman_collection.json) — regenerate: `composer postman:generate` (needs Node.js / **npx**) |
-| Database diagram | [`docs/database-diagram.md`](docs/database-diagram.md) — Mermaid source + PNG [`docs/mermaid-diagram-2026-03-30-102825.png`](docs/mermaid-diagram-2026-03-30-102825.png) |
+| Postman (OpenAPI) | [`docs/postman/Library_API.postman_collection.json`](docs/postman/Library_API.postman_collection.json) — `composer postman:generate` (Node.js / **npx**) |
+| Postman (prefilled) | [`docs/postman/Library_API.postman_collection.prefilled.json`](docs/postman/Library_API.postman_collection.prefilled.json) — import this for sample bodies; refresh with `composer postman:prefilled` or full `postman:generate` |
+| Database diagram | [`docs/database-diagram.md`](docs/database-diagram.md) — Mermaid source + PNG [`docs/diagrams/mermaid-diagram-2026-03-30-102825.png`](docs/diagrams/mermaid-diagram-2026-03-30-102825.png) |
 
 ## Run the application (Docker)
 
@@ -175,7 +176,7 @@ docker compose exec app php artisan migrate
 Use **`docker compose exec app …`** for Composer and Artisan if you work only inside Docker (e.g. `docker compose exec app composer run test:ci`).
 
 - **OpenAPI** — [zircote/swagger-php](https://github.com/zircote/swagger-php): `composer run docs:generate` (writes `storage/api-docs/openapi.yaml`; gitignored output aside from folder `.gitignore`).
-- **Postman** — Collection is generated from the OpenAPI spec via [openapi-to-postmanv2](https://www.npmjs.com/package/openapi-to-postmanv2). Run **`composer run postman:generate`** (runs `docs:generate`, then `npx openapi-to-postmanv2@6`, then [`scripts/postman_apply_defaults.php`](scripts/postman_apply_defaults.php) to set **`baseUrl`** = `http://localhost:8000/api/v1` and **`bearerToken`**). Import **`postman/Library_API.postman_collection.json`** in Postman; after **register** or **login**, copy the token into **`bearerToken`**. For Docker, change **`baseUrl`** to `http://localhost:<APP_PORT>/api/v1`.
+- **Postman** — Base collection: [openapi-to-postmanv2](https://www.npmjs.com/package/openapi-to-postmanv2). **`composer run postman:generate`** runs `docs:generate`, conversion, [`scripts/postman_apply_defaults.php`](scripts/postman_apply_defaults.php) (`baseUrl`, `bearerToken`), then [`scripts/postman_build_prefilled.php`](scripts/postman_build_prefilled.php). Import **`docs/postman/Library_API.postman_collection.prefilled.json`** for ready-made JSON bodies and variables (`demoEmail`, `demoPassword`, …); copy **`data.token`** from register/login into **`bearerToken`**. Plain OpenAPI mirror: **`docs/postman/Library_API.postman_collection.json`**. For Docker, set **`baseUrl`** to `http://localhost:<APP_PORT>/api/v1`.
 - **Code style** — `composer run format`; check only: `composer run lint` (`pint --test`).
 - **Tests** — `composer run test` or `composer run test:ci` (`migrate:fresh` + tests).
 - **CI** — [`.github/workflows/ci.yml`](.github/workflows/ci.yml): PHP 8.3, `composer install`, `lint`, `docs:generate`, `test:ci` with SQLite and env overrides (`DB_*`, `CACHE_STORE=array`, etc.).
