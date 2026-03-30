@@ -15,6 +15,7 @@ use App\Http\Contracts\UserControllerInterface;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/status/liveness', [StatusControllerInterface::class, 'liveness']);
+Route::get('/status/readiness', [StatusControllerInterface::class, 'readiness']);
 
 Route::post('/register', [RegisterUserControllerInterface::class, 'store']);
 Route::post('/login', [LoginUserControllerInterface::class, 'login'])

@@ -576,6 +576,36 @@ paths:
                   data: { required: [status], properties: { status: { type: string, example: ok } }, type: object }
                   message: { type: string, example: 'Liveness check passed' }
                 type: object
+  /status/readiness:
+    get:
+      tags:
+        - Status
+      summary: 'Readiness probe'
+      description: 'Returns 200 when the database connection succeeds; 503 when the database is unavailable.'
+      operationId: statusReadiness
+      responses:
+        '200':
+          description: 'Database is reachable'
+          content:
+            application/json:
+              schema:
+                required:
+                  - data
+                  - message
+                properties:
+                  data: { required: [status, database], properties: { status: { type: string, example: ok }, database: { type: string, example: ok } }, type: object }
+                  message: { type: string, example: 'Readiness check passed' }
+                type: object
+        '503':
+          description: 'Database unavailable'
+          content:
+            application/json:
+              schema:
+                required:
+                  - message
+                properties:
+                  message: { type: string, example: 'Readiness check failed: database unavailable' }
+                type: object
   /users:
     get:
       tags:
