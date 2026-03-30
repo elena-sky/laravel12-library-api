@@ -64,6 +64,12 @@
             "@php vendor/bin/openapi app -o storage/api-docs/openapi.yaml -f yaml"
         ],
         "openapi": "@docs:generate",
+        "postman:generate": [
+            "@docs:generate",
+            "@php -r \"is_dir('postman') || mkdir('postman', 0755, true);\"",
+            "npx --yes openapi-to-postmanv2@6 -s storage/api-docs/openapi.yaml -o postman/Library_API.postman_collection.json -p",
+            "@php scripts/postman_apply_defaults.php"
+        ],
         "quality": [
             "@lint",
             "@test:ci"

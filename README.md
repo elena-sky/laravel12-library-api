@@ -122,6 +122,7 @@ The domain maps cleanly to resources (`users`, `books`, `rentals`). REST keeps c
 | Swagger / OpenAPI (REST) | **Done** — `composer docs:generate` (alias `openapi`); attributes on contracts + [`app/OpenApi/OpenApiInfo.php`](app/OpenApi/OpenApiInfo.php) |
 | GraphQL SDL + Playground | **Not used** — REST chosen |
 | Dockerized dev environment | **Done** — [`Dockerfile`](Dockerfile), [`docker-compose.yml`](docker-compose.yml); see [Run with Docker](#run-with-docker) |
+| Postman collection | **Done** — [`postman/Library_API.postman_collection.json`](postman/Library_API.postman_collection.json); regen: `composer postman:generate` (needs **Node.js** + **npx**) |
 | DDD-style folder structure | **Partial** — domain-oriented `Actions/`, not full DDD layout |
 | API rate limiting | **Partial** — named limiter on `login` only |
 | Caching strategy (e.g. book lists) | **Not implemented** |
@@ -131,7 +132,8 @@ The domain maps cleanly to resources (`users`, `books`, `rentals`). REST keeps c
 - [x] **Project code** in this repository (root: `laravel12-library-api/`).
 - [x] **README.md** — setup, chosen architecture (REST + justification), endpoint documentation, trade-offs / design notes.
 - [x] **Optional Docker** — [`Dockerfile`](Dockerfile) + [`docker-compose.yml`](docker-compose.yml); [Run with Docker](#run-with-docker).
-- [ ] **Optional Postman / GraphQL collection** — not provided.
+- [x] **Optional Postman** — [`postman/Library_API.postman_collection.json`](postman/Library_API.postman_collection.json); generate from OpenAPI: `composer postman:generate` (requires Node/`npx`).
+- [ ] **Optional GraphQL collection** — not applicable (REST API).
 - [ ] **Optional database diagram** — not provided.
 
 Application root for commands: this directory. In `.env`, use **`APP_NAME=Library API`**, PostgreSQL **`DB_DATABASE=library`**, **`DB_USERNAME=library_user`** (names are independent of the folder name).
@@ -306,6 +308,7 @@ docker compose build --no-cache app   # rebuild image only
 ## Development & CI
 
 - **OpenAPI** — [zircote/swagger-php](https://github.com/zircote/swagger-php): `composer run docs:generate` (writes `storage/api-docs/openapi.yaml`; gitignored output aside from folder `.gitignore`).
+- **Postman** — Collection is generated from the OpenAPI spec via [openapi-to-postmanv2](https://www.npmjs.com/package/openapi-to-postmanv2). Run **`composer run postman:generate`** (runs `docs:generate`, then `npx openapi-to-postmanv2@6`, then [`scripts/postman_apply_defaults.php`](scripts/postman_apply_defaults.php) to set **`baseUrl`** = `http://localhost:8000/api/v1` and **`bearerToken`**). Import **`postman/Library_API.postman_collection.json`** in Postman; after **register** or **login**, copy the token into **`bearerToken`**. For Docker, change **`baseUrl`** to `http://localhost:<APP_PORT>/api/v1`.
 - **Code style** — `composer run format`; check only: `composer run lint` (`pint --test`).
 - **Tests** — `composer run test` or `composer run test:ci` (`migrate:fresh` + tests).
 - **CI** — [`.github/workflows/ci.yml`](.github/workflows/ci.yml): PHP 8.3, `composer install`, `lint`, `docs:generate`, `test:ci` with SQLite and env overrides (`DB_*`, `CACHE_STORE=array`, etc.).
