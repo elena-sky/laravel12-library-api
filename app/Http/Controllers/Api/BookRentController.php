@@ -23,6 +23,7 @@ use App\OpenApi\Schemas\BookRent\ReadingProgressDataResponse;
 use App\Providers\AppServiceProvider;
 use App\Support\ApiResponse;
 use Illuminate\Http\JsonResponse;
+use Override;
 
 /**
  * {@inheritDoc}
@@ -40,6 +41,7 @@ class BookRentController extends Controller implements BookRentControllerInterfa
         private readonly FinishBookRentAction $finishBookRent,
     ) {}
 
+    #[Override]
     public function index(ListBookRentsRequest $request): JsonResponse
     {
         /** @var User $user */
@@ -53,6 +55,7 @@ class BookRentController extends Controller implements BookRentControllerInterfa
     /**
      * @throws ResourceConflictException
      */
+    #[Override]
     public function store(StoreBookRentRequest $request): JsonResponse
     {
         /** @var User $user */
@@ -69,6 +72,7 @@ class BookRentController extends Controller implements BookRentControllerInterfa
         return ApiResponse::resource(BookRentResource::make($rent), 'Rental started', 201);
     }
 
+    #[Override]
     public function show(ShowBookRentRequest $request, BookRent $bookRent): JsonResponse
     {
         $bookRent->load('book');
@@ -76,6 +80,7 @@ class BookRentController extends Controller implements BookRentControllerInterfa
         return ApiResponse::resource(BookRentResource::make($bookRent));
     }
 
+    #[Override]
     public function extend(ExtendBookRentRequest $request, BookRent $bookRent): JsonResponse
     {
         $updated = $this->extendBookRent->execute($bookRent, $request->dueDate());
@@ -88,6 +93,7 @@ class BookRentController extends Controller implements BookRentControllerInterfa
      * Intentionally returns a narrow payload (`reading_progress` only), matching
      * {@see ReadingProgressDataResponse}.
      */
+    #[Override]
     public function showReadingProgress(ShowBookRentRequest $request, BookRent $bookRent): JsonResponse
     {
         return ApiResponse::success([
@@ -98,6 +104,7 @@ class BookRentController extends Controller implements BookRentControllerInterfa
     /**
      * @throws ResourceConflictException
      */
+    #[Override]
     public function updateReadingProgress(
         UpdateBookRentReadingProgressRequest $request,
         BookRent $bookRent
@@ -112,6 +119,7 @@ class BookRentController extends Controller implements BookRentControllerInterfa
     /**
      * @throws ResourceConflictException
      */
+    #[Override]
     public function finish(FinishBookRentRequest $request, BookRent $bookRent): JsonResponse
     {
         $finished = $this->finishBookRent->execute($bookRent);

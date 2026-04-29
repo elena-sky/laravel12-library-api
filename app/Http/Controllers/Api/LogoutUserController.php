@@ -8,6 +8,7 @@ use App\Support\ApiResponse;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Laravel\Sanctum\PersonalAccessToken;
+use Override;
 
 /**
  * {@inheritDoc}
@@ -18,6 +19,7 @@ class LogoutUserController extends Controller implements LogoutUserControllerInt
      * Revoke the personal access token matching the request {@see Request::bearerToken}
      * (the same credential Sanctum used to authenticate this call).
      */
+    #[Override]
     public function logout(Request $request): JsonResponse
     {
         $plain = $request->bearerToken();

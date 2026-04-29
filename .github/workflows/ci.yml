@@ -53,6 +53,9 @@ jobs:
       - name: Lint (Pint)
         run: composer lint
 
+      - name: PHPStan (Larastan)
+        run: composer analyse
+
       - name: Generate OpenAPI
         run: composer docs:generate
 

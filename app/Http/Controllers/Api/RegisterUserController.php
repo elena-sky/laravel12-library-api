@@ -10,6 +10,7 @@ use App\Http\Resources\UserResource;
 use App\Support\ApiResponse;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Arr;
+use Override;
 
 /**
  * {@inheritDoc}
@@ -20,6 +21,7 @@ class RegisterUserController extends Controller implements RegisterUserControlle
         private readonly CreateUserAction $createUser,
     ) {}
 
+    #[Override]
     public function store(StoreUserRequest $request): JsonResponse
     {
         $payload = Arr::only($request->validated(), ['name', 'email', 'password']);

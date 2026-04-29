@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Support\ApiResponse;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\DB;
+use Override;
 use Throwable;
 
 /**
@@ -17,6 +18,7 @@ class StatusController extends Controller implements StatusControllerInterface
     /**
      * {@inheritDoc}
      */
+    #[Override]
     public function liveness(): JsonResponse
     {
         return ApiResponse::success(
@@ -28,6 +30,7 @@ class StatusController extends Controller implements StatusControllerInterface
     /**
      * {@inheritDoc}
      */
+    #[Override]
     public function readiness(): JsonResponse
     {
         try {

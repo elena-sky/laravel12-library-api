@@ -17,6 +17,7 @@ use App\Http\Resources\UserResource;
 use App\Models\User;
 use App\Support\ApiResponse;
 use Illuminate\Http\JsonResponse;
+use Override;
 
 /**
  * {@inheritDoc}
@@ -30,6 +31,7 @@ class UserController extends Controller implements UserControllerInterface
         private readonly DeleteUserAction $deleteUser,
     ) {}
 
+    #[Override]
     public function index(IndexUsersRequest $request): JsonResponse
     {
         $paginator = $this->listUsers->execute($request->perPage());
@@ -37,6 +39,7 @@ class UserController extends Controller implements UserControllerInterface
         return ApiResponse::paginated($paginator, UserResource::collection($paginator));
     }
 
+    #[Override]
     public function store(StoreManagedUserRequest $request): JsonResponse
     {
         $user = $this->createUser->execute($request->validated());
@@ -44,11 +47,13 @@ class UserController extends Controller implements UserControllerInterface
         return ApiResponse::resource(UserResource::make($user), 'User created', 201);
     }
 
+    #[Override]
     public function show(ShowUserRequest $request, User $user): JsonResponse
     {
         return ApiResponse::resource(UserResource::make($user));
     }
 
+    #[Override]
     public function update(UpdateManagedUserRequest $request, User $user): JsonResponse
     {
         $updated = $this->updateUser->execute($user, $request->validated());
@@ -56,6 +61,7 @@ class UserController extends Controller implements UserControllerInterface
         return ApiResponse::resource(UserResource::make($updated), 'User updated');
     }
 
+    #[Override]
     public function destroy(DeleteUserRequest $request, User $user): JsonResponse
     {
         /** @var User $actor */

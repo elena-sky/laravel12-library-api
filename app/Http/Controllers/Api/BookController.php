@@ -17,6 +17,7 @@ use App\Http\Resources\BookResource;
 use App\Models\Book;
 use App\Support\ApiResponse;
 use Illuminate\Http\JsonResponse;
+use Override;
 
 /**
  * {@inheritDoc}
@@ -30,6 +31,7 @@ class BookController extends Controller implements BookControllerInterface
         private readonly DeleteBookAction $deleteBook,
     ) {}
 
+    #[Override]
     public function index(ListBooksRequest $request): JsonResponse
     {
         $paginator = $this->listBooks->execute($request->filtersForAction());
@@ -37,6 +39,7 @@ class BookController extends Controller implements BookControllerInterface
         return ApiResponse::paginated($paginator, BookResource::collection($paginator));
     }
 
+    #[Override]
     public function store(StoreBookRequest $request): JsonResponse
     {
         $book = $this->createBook->execute($request->validated());
@@ -44,11 +47,13 @@ class BookController extends Controller implements BookControllerInterface
         return ApiResponse::resource(BookResource::make($book), 'Book created', 201);
     }
 
+    #[Override]
     public function show(ShowBookRequest $request, Book $book): JsonResponse
     {
         return ApiResponse::resource(BookResource::make($book));
     }
 
+    #[Override]
     public function update(UpdateBookRequest $request, Book $book): JsonResponse
     {
         $updated = $this->updateBook->execute($book, $request->validated());
@@ -56,6 +61,7 @@ class BookController extends Controller implements BookControllerInterface
         return ApiResponse::resource(BookResource::make($updated), 'Book updated');
     }
 
+    #[Override]
     public function destroy(DeleteBookRequest $request, Book $book): JsonResponse
     {
         $this->deleteBook->execute($book);
