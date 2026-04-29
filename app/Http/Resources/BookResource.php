@@ -24,8 +24,8 @@ class BookResource extends JsonResource
             'description' => $this->description,
             'total_copies' => $this->total_copies,
             'available_copies' => $this->available_copies,
-            'created_at' => $this->created_at?->toIso8601String(),
-            'updated_at' => $this->updated_at?->toIso8601String(),
+            'created_at' => $this->created_at->toIso8601String(),
+            'updated_at' => $this->updated_at->toIso8601String(),
         ];
     }
 }

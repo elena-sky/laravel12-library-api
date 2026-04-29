@@ -14,6 +14,7 @@ use App\Support\ApiResponse;
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Arr;
+use Override;
 
 /**
  * {@inheritDoc}
@@ -25,6 +26,7 @@ class CurrentUserController extends Controller implements CurrentUserControllerI
         private readonly UpdateUserPasswordAction $updateUserPassword,
     ) {}
 
+    #[Override]
     public function show(): JsonResponse
     {
         $user = auth()->user();
@@ -37,6 +39,7 @@ class CurrentUserController extends Controller implements CurrentUserControllerI
         return ApiResponse::resource(UserResource::make($user));
     }
 
+    #[Override]
     public function update(UpdateUserRequest $request): JsonResponse
     {
         $user = $request->user();
@@ -50,6 +53,7 @@ class CurrentUserController extends Controller implements CurrentUserControllerI
         return ApiResponse::resource(UserResource::make($updated), 'Current user profile updated');
     }
 
+    #[Override]
     public function updatePassword(UpdateUserPasswordRequest $request): JsonResponse
     {
         $user = $request->user();

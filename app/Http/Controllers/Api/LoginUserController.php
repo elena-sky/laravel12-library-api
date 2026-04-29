@@ -9,6 +9,7 @@ use App\Http\Requests\User\LoginUserRequest;
 use App\Http\Resources\UserResource;
 use App\Support\ApiResponse;
 use Illuminate\Http\JsonResponse;
+use Override;
 
 /**
  * {@inheritDoc}
@@ -19,6 +20,7 @@ class LoginUserController extends Controller implements LoginUserControllerInter
         private readonly LoginUserAction $loginUser,
     ) {}
 
+    #[Override]
     public function login(LoginUserRequest $request): JsonResponse
     {
         $validated = $request->validated();

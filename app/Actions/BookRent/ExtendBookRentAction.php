@@ -5,6 +5,7 @@ namespace App\Actions\BookRent;
 use App\Exceptions\ResourceConflictException;
 use App\Models\BookRent;
 use Carbon\CarbonInterface;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 
 final class ExtendBookRentAction
@@ -19,7 +20,7 @@ final class ExtendBookRentAction
                 throw new ResourceConflictException('Cannot extend a finished rental');
             }
 
-            $locked->due_date = $newDueDate;
+            $locked->due_date = Carbon::parse($newDueDate);
             $locked->extended_count = $locked->extended_count + 1;
             $locked->save();
 
