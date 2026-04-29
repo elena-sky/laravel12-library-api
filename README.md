@@ -148,7 +148,7 @@ The domain maps cleanly to resources (`users`, `books`, `rentals`). REST keeps c
 
 ## Run the application (Docker)
 
-**Prerequisites:** [Docker Engine](https://docs.docker.com/engine/) and **Compose v2**. Stack: PHP **8.3** + Postgres **16** ([`Dockerfile`](Dockerfile), [`docker-compose.yml`](docker-compose.yml)). All commands below assume the **project root** (`laravel12-library-api`). Do not commit `.env`.
+**Prerequisites:** [Docker Engine](https://docs.docker.com/engine/) and **Compose v2**. Stack: PHP **8.4** + Postgres **16** ([`Dockerfile`](Dockerfile), [`docker-compose.yml`](docker-compose.yml)). All commands below assume the **project root** (`laravel12-library-api`). Do not commit `.env`.
 
 ### Step-by-step (first run)
 
@@ -204,7 +204,7 @@ Use **`docker compose exec app …`** for Composer and Artisan if you work only 
 - **HTTP request log** — Every **`api/v1/*`** request prints one **`HTTP API`** JSON line to **STDOUT** (visible in **`docker compose logs -f app`**): method, path, query, IP, `user_id` when authenticated, status, duration ms. Bodies are not logged (`LogIncomingApiRequest`).
 - **Code style** — `composer run format`; check only: `composer run lint` (`pint --test`).
 - **Tests** — `composer run test` or `composer run test:ci` (`migrate:fresh` + tests).
-- **CI** — [`.github/workflows/ci.yml`](.github/workflows/ci.yml): PHP 8.3, `composer install`, `lint`, `docs:generate`, `test:ci` with SQLite and env overrides (`DB_*`, `CACHE_STORE=array`, etc.).
+- **CI** — [`.github/workflows/ci.yml`](.github/workflows/ci.yml): PHP 8.4, `composer install`, `lint`, `docs:generate`, `test:ci` with SQLite and env overrides (`DB_*`, `CACHE_STORE=array`, etc.).
 
 **Local parity:** If `.env` uses PostgreSQL, create `database/testing.sqlite` and run e.g.:
 
