@@ -3,6 +3,7 @@
 namespace App\Http\Requests\Book;
 
 use App\Actions\Book\ListBooksAction;
+use App\DTO\Book\ListBooksFilters;
 use App\Models\Book;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
@@ -41,32 +42,30 @@ class ListBooksRequest extends FormRequest
         ]);
     }
 
-    /**
-     * @return array{
-     *     title?: ?string,
-     *     author?: ?string,
-     *     genre?: ?string,
-     *     available_only?: bool,
-     *     sort_by: string,
-     *     sort_dir: string,
-     *     per_page: int,
-     *     page: int
-     * }
-     */
-    public function filtersForAction(): array
+    public function filtersDto(): ListBooksFilters
     {
         /** @var array<string, mixed> $v */
         $v = $this->validated();
 
-        return [
-            'title' => $v['title'] ?? null,
-            'author' => $v['author'] ?? null,
-            'genre' => $v['genre'] ?? null,
-            'available_only' => (bool) ($v['available_only'] ?? false),
-            'sort_by' => $v['sort_by'],
-            'sort_dir' => $v['sort_dir'],
-            'per_page' => (int) $v['per_page'],
-            'page' => (int) $v['page'],
-        ];
+        return new ListBooksFilters(
+            title: $this->optionalStringFilter($v, 'title'),
+            author: $this->optionalStringFilter($v, 'author'),
+            genre: $this->optionalStringFilter($v, 'genre'),
+            availableOnly: (bool) ($v['available_only'] ?? false),
+            sortBy: (string) $v['sort_by'],
+            sortDir: (string) $v['sort_dir'],
+            perPage: (int) $v['per_page'],
+            page: (int) $v['page'],
+        );
+    }
+
+    /**
+     * @param  array<string, mixed>  $validated
+     */
+    private function optionalStringFilter(array $validated, string $key): ?string
+    {
+        $value = $validated[$key] ?? null;
+
+        return $value === null ? null : (string) $value;
     }
 }

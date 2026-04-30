@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Api;
 
 use App\Actions\User\UpdateUserAction;
 use App\Actions\User\UpdateUserPasswordAction;
+use App\DTO\User\UpdateUserData;
+use App\DTO\User\UpdateUserPasswordData;
 use App\Http\Contracts\CurrentUserControllerInterface;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\User\UpdateUserPasswordRequest;
@@ -13,7 +15,6 @@ use App\Models\User;
 use App\Support\ApiResponse;
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Support\Arr;
 use Override;
 
 /**
@@ -48,7 +49,7 @@ class CurrentUserController extends Controller implements CurrentUserControllerI
         }
 
         $this->authorize('update', $user);
-        $updated = $this->updateUser->execute($user, $request->validated());
+        $updated = $this->updateUser->execute($user, UpdateUserData::fromValidated($request->validated()));
 
         return ApiResponse::resource(UserResource::make($updated), 'Current user profile updated');
     }
@@ -62,7 +63,7 @@ class CurrentUserController extends Controller implements CurrentUserControllerI
         }
 
         $this->authorize('update', $user);
-        $this->updateUserPassword->execute($user, Arr::only($request->validated(), ['password']));
+        $this->updateUserPassword->execute($user, UpdateUserPasswordData::fromValidated($request->validated()));
 
         return ApiResponse::success(null, 'Password updated successfully');
     }

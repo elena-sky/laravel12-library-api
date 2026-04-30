@@ -3,6 +3,7 @@
 namespace Tests\Unit\Actions\User;
 
 use App\Actions\User\UpdateUserAction;
+use App\DTO\User\UpdateUserData;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
@@ -15,7 +16,7 @@ class UpdateUserActionTest extends TestCase
     {
         $user = User::factory()->create(['name' => 'Old', 'email' => 'keep@example.com']);
 
-        $updated = (new UpdateUserAction)->execute($user, ['name' => 'New']);
+        $updated = (new UpdateUserAction)->execute($user, UpdateUserData::fromValidated(['name' => 'New']));
 
         $this->assertSame('New', $updated->name);
         $this->assertSame('keep@example.com', $updated->email);
@@ -25,7 +26,7 @@ class UpdateUserActionTest extends TestCase
     {
         $user = User::factory()->create(['name' => 'KeepName', 'email' => 'old@example.com']);
 
-        $updated = (new UpdateUserAction)->execute($user, ['email' => 'fresh@example.com']);
+        $updated = (new UpdateUserAction)->execute($user, UpdateUserData::fromValidated(['email' => 'fresh@example.com']));
 
         $this->assertSame('KeepName', $updated->name);
         $this->assertSame('fresh@example.com', $updated->email);
@@ -36,7 +37,7 @@ class UpdateUserActionTest extends TestCase
         $user = User::factory()->create(['name' => 'A', 'email' => 'a@example.com']);
         $before = $user->updated_at?->toIso8601String();
 
-        $updated = (new UpdateUserAction)->execute($user, []);
+        $updated = (new UpdateUserAction)->execute($user, UpdateUserData::fromValidated([]));
 
         $this->assertSame('A', $updated->name);
         $this->assertSame('a@example.com', $updated->email);

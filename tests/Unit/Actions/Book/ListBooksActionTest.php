@@ -3,6 +3,7 @@
 namespace Tests\Unit\Actions\Book;
 
 use App\Actions\Book\ListBooksAction;
+use App\DTO\Book\ListBooksFilters;
 use App\Models\Book;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
@@ -13,11 +14,10 @@ class ListBooksActionTest extends TestCase
 
     /**
      * @param  array<string, mixed>  $overrides
-     * @return array<string, mixed>
      */
-    private function baseFilters(array $overrides = []): array
+    private function baseFilters(array $overrides = []): ListBooksFilters
     {
-        return array_merge([
+        $f = array_merge([
             'title' => null,
             'author' => null,
             'genre' => null,
@@ -27,6 +27,17 @@ class ListBooksActionTest extends TestCase
             'per_page' => 15,
             'page' => 1,
         ], $overrides);
+
+        return new ListBooksFilters(
+            title: $f['title'],
+            author: $f['author'],
+            genre: $f['genre'],
+            availableOnly: (bool) $f['available_only'],
+            sortBy: (string) $f['sort_by'],
+            sortDir: (string) $f['sort_dir'],
+            perPage: (int) $f['per_page'],
+            page: (int) $f['page'],
+        );
     }
 
     public function test_filters_by_title_case_insensitively(): void

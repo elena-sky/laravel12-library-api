@@ -2,17 +2,15 @@
 
 namespace App\Actions\User;
 
+use App\DTO\User\UpdateUserPasswordData;
 use App\Models\User;
 
 final class UpdateUserPasswordAction
 {
-    /**
-     * @param  array{password: string}  $payload
-     */
-    public function execute(User $user, array $payload): void
+    public function execute(User $user, UpdateUserPasswordData $data): void
     {
         $user->update([
-            'password' => $payload['password'],
+            'password' => $data->password,
         ]);
     }
 }

@@ -3,6 +3,7 @@
 namespace Tests\Unit\Actions\Book;
 
 use App\Actions\Book\UpdateBookAction;
+use App\DTO\Book\UpdateBookData;
 use App\Models\Book;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
@@ -20,7 +21,7 @@ class UpdateBookActionTest extends TestCase
             'available_copies' => 10,
         ]);
 
-        $updated = $this->app->make(UpdateBookAction::class)->execute($book, ['title' => 'New']);
+        $updated = $this->app->make(UpdateBookAction::class)->execute($book, UpdateBookData::fromValidated(['title' => 'New']));
 
         $this->assertSame('New', $updated->title);
         $this->assertSame('Same', $updated->author);

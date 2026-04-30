@@ -6,6 +6,8 @@ use App\Actions\User\CreateUserAction;
 use App\Actions\User\DeleteUserAction;
 use App\Actions\User\ListUsersAction;
 use App\Actions\User\UpdateUserAction;
+use App\DTO\User\CreateUserData;
+use App\DTO\User\UpdateUserData;
 use App\Http\Contracts\UserControllerInterface;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\User\DeleteUserRequest;
@@ -42,7 +44,7 @@ class UserController extends Controller implements UserControllerInterface
     #[Override]
     public function store(StoreManagedUserRequest $request): JsonResponse
     {
-        $user = $this->createUser->execute($request->validated());
+        $user = $this->createUser->execute(CreateUserData::fromValidated($request->validated()));
 
         return ApiResponse::resource(UserResource::make($user), 'User created', 201);
     }
@@ -56,7 +58,7 @@ class UserController extends Controller implements UserControllerInterface
     #[Override]
     public function update(UpdateManagedUserRequest $request, User $user): JsonResponse
     {
-        $updated = $this->updateUser->execute($user, $request->validated());
+        $updated = $this->updateUser->execute($user, UpdateUserData::fromValidated($request->validated()));
 
         return ApiResponse::resource(UserResource::make($updated), 'User updated');
     }
