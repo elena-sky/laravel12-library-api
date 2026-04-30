@@ -6,6 +6,8 @@ use App\Actions\Book\CreateBookAction;
 use App\Actions\Book\DeleteBookAction;
 use App\Actions\Book\ListBooksAction;
 use App\Actions\Book\UpdateBookAction;
+use App\DTO\Book\CreateBookData;
+use App\DTO\Book\UpdateBookData;
 use App\Http\Contracts\BookControllerInterface;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Book\DeleteBookRequest;
@@ -34,7 +36,7 @@ class BookController extends Controller implements BookControllerInterface
     #[Override]
     public function index(ListBooksRequest $request): JsonResponse
     {
-        $paginator = $this->listBooks->execute($request->filtersForAction());
+        $paginator = $this->listBooks->execute($request->filtersDto());
 
         return ApiResponse::paginated($paginator, BookResource::collection($paginator));
     }
@@ -42,7 +44,7 @@ class BookController extends Controller implements BookControllerInterface
     #[Override]
     public function store(StoreBookRequest $request): JsonResponse
     {
-        $book = $this->createBook->execute($request->validated());
+        $book = $this->createBook->execute(CreateBookData::fromValidated($request->validated()));
 
         return ApiResponse::resource(BookResource::make($book), 'Book created', 201);
     }
@@ -56,7 +58,7 @@ class BookController extends Controller implements BookControllerInterface
     #[Override]
     public function update(UpdateBookRequest $request, Book $book): JsonResponse
     {
-        $updated = $this->updateBook->execute($book, $request->validated());
+        $updated = $this->updateBook->execute($book, UpdateBookData::fromValidated($request->validated()));
 
         return ApiResponse::resource(BookResource::make($updated), 'Book updated');
     }

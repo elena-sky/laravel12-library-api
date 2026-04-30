@@ -2,6 +2,7 @@
 
 namespace App\Actions\Book;
 
+use App\DTO\Book\CreateBookData;
 use App\Models\Book;
 use App\Support\BookListCache;
 
@@ -11,26 +12,9 @@ final class CreateBookAction
         private readonly BookListCache $bookListCache,
     ) {}
 
-    /**
-     * @param  array{
-     *     title: string,
-     *     author: string,
-     *     genre: string,
-     *     description?: ?string,
-     *     total_copies: int,
-     *     available_copies: int
-     * }  $payload
-     */
-    public function execute(array $payload): Book
+    public function execute(CreateBookData $data): Book
     {
-        $book = Book::query()->create([
-            'title' => $payload['title'],
-            'author' => $payload['author'],
-            'genre' => $payload['genre'],
-            'description' => $payload['description'] ?? null,
-            'total_copies' => $payload['total_copies'],
-            'available_copies' => $payload['available_copies'],
-        ]);
+        $book = Book::query()->create($data->toCreateArray());
 
         $this->bookListCache->bumpVersion();
 

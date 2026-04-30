@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Actions\User\CreateUserAction;
+use App\DTO\User\CreateUserData;
 use App\Http\Contracts\RegisterUserControllerInterface;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\User\StoreUserRequest;
@@ -24,8 +25,9 @@ class RegisterUserController extends Controller implements RegisterUserControlle
     #[Override]
     public function store(StoreUserRequest $request): JsonResponse
     {
-        $payload = Arr::only($request->validated(), ['name', 'email', 'password']);
-        $user = $this->createUser->execute($payload);
+        $user = $this->createUser->execute(CreateUserData::fromValidated(
+            Arr::only($request->validated(), ['name', 'email', 'password'])
+        ));
         $token = $user->createToken('api')->plainTextToken;
 
         return ApiResponse::created([

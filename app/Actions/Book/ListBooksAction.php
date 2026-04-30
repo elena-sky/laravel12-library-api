@@ -2,6 +2,7 @@
 
 namespace App\Actions\Book;
 
+use App\DTO\Book\ListBooksFilters;
 use App\Models\Book;
 use App\Support\BookListCache;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
@@ -23,21 +24,9 @@ final class ListBooksAction
         private readonly BookListCache $bookListCache,
     ) {}
 
-    /**
-     * @param  array{
-     *     title?: ?string,
-     *     author?: ?string,
-     *     genre?: ?string,
-     *     available_only?: bool,
-     *     sort_by: string,
-     *     sort_dir: string,
-     *     per_page: int,
-     *     page: int
-     * }  $filters
-     */
-    public function execute(array $filters): LengthAwarePaginator
+    public function execute(ListBooksFilters $filters): LengthAwarePaginator
     {
-        $normalized = $this->bookListCache->normalizeListFilters($filters);
+        $normalized = $this->bookListCache->normalizeListFilters($filters->toArray());
 
         return $this->bookListCache->remember($normalized, function () use ($normalized): LengthAwarePaginator {
             $query = Book::query();

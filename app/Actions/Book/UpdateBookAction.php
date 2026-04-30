@@ -2,6 +2,7 @@
 
 namespace App\Actions\Book;
 
+use App\DTO\Book\UpdateBookData;
 use App\Models\Book;
 use App\Support\BookListCache;
 
@@ -11,19 +12,9 @@ final class UpdateBookAction
         private readonly BookListCache $bookListCache,
     ) {}
 
-    /**
-     * @param  array{
-     *     title?: string,
-     *     author?: string,
-     *     genre?: string,
-     *     description?: ?string,
-     *     total_copies?: int,
-     *     available_copies?: int
-     * }  $payload
-     */
-    public function execute(Book $book, array $payload): Book
+    public function execute(Book $book, UpdateBookData $data): Book
     {
-        $book->fill($payload);
+        $book->fill($data->toFillArray());
         $book->save();
 
         $this->bookListCache->bumpVersion();

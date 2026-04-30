@@ -96,7 +96,7 @@ The domain maps cleanly to resources (`users`, `books`, `rentals`). REST keeps c
 - **Controller contracts + OpenAPI** — Attributes live on `app/Http/Contracts/*`; controllers in `app/Http/Controllers/Api/` are bound in `AppServiceProvider` so the spec tracks the public surface.
 - **JSON shape** — Same envelope for success and errors on `api/*` via `ApiResponse` and `bootstrap/app.php`.
 - **Validation** — Form Request classes per action; policies align with authorization for books, users, and rentals.
-- **Domain operations** — `app/Actions/{Book,BookRent,User}/` hold use cases; no separate `DTOs/` or `Services/` trees.
+- **Domain operations** — `app/Actions/{Book,BookRent,User}/` hold use cases. **Input DTOs** for array-shaped action payloads live in `app/DTO/{Book,User}/` (readonly classes built from validated requests). There is no separate `Services/` tree.
 
 ### Caching strategy
 
